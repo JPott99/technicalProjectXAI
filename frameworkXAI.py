@@ -47,3 +47,52 @@ def environmentKnowledge(agentProfile, environmentReliability):
         impartedWisdom = [impartedWisdom[2],"<",impartedWisdom[0], environmentReliability, ["E", agentProfile[0]]]
     agentProfile[2].append(impartedWisdom)
     return agentProfile
+
+def meetAgent(agentProfile, agentArray):
+    otherAgentID = random.randint(0,len(agentArray))
+    otherAgentProfile = agentArray[otherAgentID]
+
+def transitiveDeduction(agentProfile):
+    [agentID, agentReliability, agentKnowledge, agentHypotheses] = agentProfile
+    for i in range(len(agentKnowledge)):
+        if agentKnowledge[i][1] == "<":
+            for j in range(len(agentKnowledge)):
+                if agentKnowledge[j][1] == "<":
+                    if i != j:
+                        if agentKnowledge[i][0] == agentKnowledge[j][2]:
+                            # {x < y, b < x} -> {b < y}
+                            combinedProb = 1 #placeholder
+                            newKnowledge = [agentKnowledge[j][0],"<",agentKnowledge[i][2],combinedProb,[str(agentID) + "["+str(i)+"]"+"["+str(j)+"]"]]
+                            agentKnowledge = checkKnowledge(agentKnowledge,newKnowledge)
+    agentProfile = [agentID, agentReliability, agentKnowledge, agentHypotheses]
+    return agentProfile
+
+def checkKnowledge(agentKnowledge, newKnowledge):
+    for i in agentKnowledge:
+        if i[0] == newKnowledge[0]:
+            if i[2] == newKnowledge[2]:
+                if i[3]>=newKnowledge[3]:
+                    return agentKnowledge
+                else:
+                    i[3] = newKnowledge[3]
+                    i[4].append(newKnowledge[4][0])
+                    return agentKnowledge
+    agentKnowledge.append(newKnowledge)
+    return agentKnowledge
+
+
+def agentThink(agentProfile):
+    agentProfile = transitiveDeduction(agentProfile)
+    return agentProfile
+
+def agentAction(agentProfile, environmentReliability, agentArray):
+    whatToDo = random.uniform(0,1)
+    if whatToDo < 0.5:
+        agentProfile = meetAgent(agentProfile, agentArray)
+    elif whatToDo > 0.9:
+        agentProfile = environmentKnowledge(agentProfile, environmentReliability)
+    else:
+        agentProfile = agentThink(agentProfile)
+    return agentProfile
+
+print(agentThink([0,1,[["a","<","b",1,["E",0]],["b","<","c",1,["E",0]]],[]]))
