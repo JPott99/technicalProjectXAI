@@ -39,13 +39,13 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     while otherLetter == firstLetter:
         otherLetter = random.randint(0,len(theTruth)-1)
     if firstLetter < otherLetter:
-        impartedWisdom = [theTruth[firstLetter],"<",theTruth[otherLetter], environmentReliability, ["E", agentProfile[0]]]
+        impartedWisdom = [theTruth[firstLetter],"<",theTruth[otherLetter], environmentReliability, ["E"]]
     else:
-        impartedWisdom = [theTruth[otherLetter],"<",theTruth[firstLetter], environmentReliability, ["E", agentProfile[0]]]
+        impartedWisdom = [theTruth[otherLetter],"<",theTruth[firstLetter], environmentReliability, ["E"]]
     isMistDescended = random.uniform(0,1)
     if isMistDescended > environmentReliability:
         impartedWisdom = invertKnowledge(impartedWisdom)
-    agentProfile[2] = checkKnowledge(agentProfile[2],impartedWisdom)
+    agentProfile[2] = checkKnowledge(agentProfile[2],impartedWisdom,agentProfile[0])
     return agentProfile
 
 def invertKnowledge(knowledgeBit):
@@ -56,9 +56,19 @@ def invertKnowledge(knowledgeBit):
     knowledgeBit[2] = tempVar
     return knowledgeBit
 
-# def meetAgent(agentProfile, agentArray):
-#     otherAgentID = random.randint(0,len(agentArray)-1)
-#     otherAgentProfile = agentArray[otherAgentID]
+def meetAgent(agentProfile, agentArray):
+    otherAgentID = agentProfile[0]
+    while otherAgentID == agentProfile[0]:
+        otherAgentID = random.randint(0,len(agentArray)-1)
+    otherAgentProfile = agentArray[otherAgentID]
+    chosenHypothesis = random.choice(otherAgentProfile[3])
+    for i in range(len(chosenHypothesis[4])):
+        newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]]
+        willIScrewUp = random.uniform(0,1)
+        if willIScrewUp > otherAgentProfile[1]:
+            newKnowledge = invertKnowledge(newKnowledge)
+        agentProfile[2] = checkKnowledge(agentProfile[2], newKnowledge, agentProfile[0])
+    return agentProfile
 
 def transitiveDeduction(agentProfile):
     # Function which checks through an agents knowledge base and identifies
@@ -74,10 +84,10 @@ def transitiveDeduction(agentProfile):
                             # {x < y, b < x} -> {b < y}
                             combinedProb = 1 #placeholder
                             newKnowledge = [agentKnowledge[j][0],"<",agentKnowledge[i][2],combinedProb,[str(agentID) + "["+str(i)+"]"+"["+str(j)+"]"]]
-                            agentKnowledge = checkKnowledge(agentKnowledge,newKnowledge)
+                            agentKnowledge = checkKnowledge(agentKnowledge,newKnowledge,agentProfile[0])
     return [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess]
 
-def checkKnowledge(agentKnowledge, newKnowledge):
+def checkKnowledge(agentKnowledge, newKnowledge, agentID):
     # Function that checks that the knowledge about to be learned is novel,
     # and if not checks if it is more beleived than the existing knowledge
     # and replaces the knowledge if so.
@@ -90,6 +100,7 @@ def checkKnowledge(agentKnowledge, newKnowledge):
                     i[3] = newKnowledge[3]
                     i[4] = newKnowledge[4]
                     return agentKnowledge
+    newKnowledge[4].append(agentID)
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
 
@@ -151,8 +162,7 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
     # their existing knowledge
     whatToDo = random.uniform(0,1)
     if whatToDo < 0.0:
-        # agentProfile = meetAgent(agentProfile, agentArray)
-        c=0
+        agentProfile = meetAgent(agentProfile, agentArray)
     elif whatToDo > 0.9:
         agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth)
     else:
@@ -167,7 +177,7 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
 
-theTruth = "123456789"#list(string.ascii_lowercase)
+theTruth = "123"#list(string.ascii_lowercase)
 environmentReliability = 1
 agentArray = genAgents(50)
 counter  = 0
@@ -185,3 +195,5 @@ while continueLooping == True:
     if counter >1000:
         continueLooping = False
         print(guessAccuracy)
+for i in agentArray:
+    print(i)
