@@ -4,16 +4,17 @@ import random
 def genAgents(numOfAgents):
     # Function that generates a list containing a given number of agents.
     # Agent Form:
-    #       [agentID, agentReliability, agentKnowledge, agentHypotheses]
+    #       [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess]
     # where agentID is a number for reference to the agent, agentReliability is a measure of
-    # how likely an agent will relay correct information, and agentKnowledge
-    # and agentHypotheses are empty arrays, at time of agent generation.
+    # how likely an agent will relay correct information, and agentKnowledge,
+    # agentHypotheses and agentGuess are empty arrays, at time of agent generation.
     agentArray = []
     for i in range(numOfAgents):
         reliability = defineReliability()
         agentKnowledge = []
         agentHypotheses = []
-        agentProfile = [i,reliability,agentKnowledge,agentHypotheses]
+        agentGuess = []
+        agentProfile = [i,reliability,agentKnowledge,agentHypotheses,agentGuess]
         agentArray.append(agentProfile)
     return agentArray
 
@@ -44,7 +45,7 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     isMistDescended = random.uniform(0,1)
     if isMistDescended > environmentReliability:
         impartedWisdom = invertKnowledge(impartedWisdom)
-    agentProfile[2].append(impartedWisdom)
+    agentProfile[2] = checkKnowledge(agentProfile[2],impartedWisdom)
     return agentProfile
 
 def invertKnowledge(knowledgeBit):
@@ -55,15 +56,15 @@ def invertKnowledge(knowledgeBit):
     knowledgeBit[2] = tempVar
     return knowledgeBit
 
-def meetAgent(agentProfile, agentArray):
-    otherAgentID = random.randint(0,len(agentArray)-1)
-    otherAgentProfile = agentArray[otherAgentID]
+# def meetAgent(agentProfile, agentArray):
+#     otherAgentID = random.randint(0,len(agentArray)-1)
+#     otherAgentProfile = agentArray[otherAgentID]
 
 def transitiveDeduction(agentProfile):
     # Function which checks through an agents knowledge base and identifies
     # if any obvious transitive deductions can be made in the form:
     # {x < y, b < x} -> {b < y}
-    [agentID, agentReliability, agentKnowledge, agentHypotheses] = agentProfile
+    [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess] = agentProfile
     for i in range(len(agentKnowledge)):
         if agentKnowledge[i][1] == "<":
             for j in range(len(agentKnowledge)):
@@ -74,8 +75,7 @@ def transitiveDeduction(agentProfile):
                             combinedProb = 1 #placeholder
                             newKnowledge = [agentKnowledge[j][0],"<",agentKnowledge[i][2],combinedProb,[str(agentID) + "["+str(i)+"]"+"["+str(j)+"]"]]
                             agentKnowledge = checkKnowledge(agentKnowledge,newKnowledge)
-    agentProfile = [agentID, agentReliability, agentKnowledge, agentHypotheses]
-    return agentProfile
+    return [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess]
 
 def checkKnowledge(agentKnowledge, newKnowledge):
     # Function that checks that the knowledge about to be learned is novel,
@@ -93,14 +93,56 @@ def checkKnowledge(agentKnowledge, newKnowledge):
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
 
-def genHypotheses(agentProfile, truthLength):
-    [agentID, agentReliability, agentKnowledge, agentHypotheses] = agentProfile
-    agentHypotheses = [] # Reset hypotheses.
+def genHypotheses(agentProfile, theTruth):
+    [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess] = agentProfile
+    newHypothesis = [] # Reset hypotheses.
+    for i in theTruth:
+        lessThans = 0
+        greaterThans = 0
+        hypothesisEvidence = []
+        for j in range(len(agentKnowledge)):
+            if agentKnowledge[j][0] == i:
+                lessThans += 1
+                hypothesisEvidence.append(j)
+            elif agentKnowledge[j][2] == i:
+                greaterThans += 1
+                hypothesisEvidence.append(j)
+        k = 0
+        while k < greaterThans:
+            newHypothesis.append([i,"=",k,0,hypothesisEvidence])
+            k+=1
+        while k < len(theTruth)-lessThans:
+            newHypothesis.append([i,"=",k,1/(len(theTruth)-greaterThans-lessThans),hypothesisEvidence])
+            k+=1
+        while k < len(theTruth):
+            newHypothesis.append([i,"=",k,0,hypothesisEvidence])
+            k+=1
 
-def agentThink(agentProfile, truthLength):
+    agentGuess = guessTheTruth(newHypothesis, theTruth)
+    return [agentID, agentReliability, agentKnowledge, newHypothesis, agentGuess]
+
+def guessTheTruth(myHypothesis, theTruth):
+    myGuess = []
+    for i in range(len(theTruth)):
+        optionsList = []
+        optionProbs = []
+        for j in myHypothesis:
+            if i == j[2] and j[3] > 0:
+                optionsList.append(j[0])
+                optionProbs.append(j[3])
+        bestProb = max(optionProbs)
+        bestOptions = []
+        for i in range(len(optionProbs)):
+            if optionProbs[i] == bestProb:
+                bestOptions.append(i)
+        bestOption = random.choice(bestOptions)
+        myGuess.append(optionsList[bestOption])
+    return myGuess
+
+def agentThink(agentProfile, theTruth):
     # Function to represent an agent thinking through their knowledge.
     agentProfile = transitiveDeduction(agentProfile)
-    agentProfile = genHypotheses(agentProfile, truthLength)
+    agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
 def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
@@ -108,25 +150,38 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
     # learn from either the environment or another agent, or to think through
     # their existing knowledge
     whatToDo = random.uniform(0,1)
-    if whatToDo < 0.5:
-        agentProfile = meetAgent(agentProfile, agentArray)
+    if whatToDo < 0.0:
+        # agentProfile = meetAgent(agentProfile, agentArray)
+        c=0
     elif whatToDo > 0.9:
         agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth)
     else:
-        agentProfile = agentThink(agentProfile, len(theTruth))
+        agentProfile = agentThink(agentProfile, theTruth)
     return agentProfile
 
 
-theTruth = "pith"#list(string.ascii_lowercase)
+def checkAgentGuessAccuracy(myGuess,theTruth):
+    guessAccuracy = 0
+    for i in range(len(myGuess)):
+        if myGuess[i]==theTruth[i]:
+            guessAccuracy += 1/len(myGuess)
+    return guessAccuracy
+
+theTruth = "123456789"#list(string.ascii_lowercase)
 environmentReliability = 1
-agentArray = genAgents(30)
+agentArray = genAgents(50)
 counter  = 0
 continueLooping = True
 while continueLooping == True:
-    for i in agentArray:
-        i = agentAction(i, environmentReliability, agentArray, theTruth)
+    guessAccuracy = 0
+    for i in range(len(agentArray)):
+        agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth)
+        guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
     counter+=1
-    if counter == 30:
+    if guessAccuracy>0.85:
         continueLooping = False
-if agentArray[0][2] != []:
-    print(agentArray[0])
+        print(guessAccuracy)
+        print(counter)
+    if counter >1000:
+        continueLooping = False
+        print(guessAccuracy)
