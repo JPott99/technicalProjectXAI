@@ -4,7 +4,7 @@ import random
 def genAgents(numOfAgents):
     # Function that generates a list containing a given number of agents.
     # Agent Form:
-    #       [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess]
+    #       [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess, lastAction]
     # where agentID is a number for reference to the agent, agentReliability is a measure of
     # how likely an agent will relay correct information, and agentKnowledge,
     # agentHypotheses and agentGuess are empty arrays, at time of agent generation.
@@ -14,7 +14,8 @@ def genAgents(numOfAgents):
         agentKnowledge = []
         agentHypotheses = []
         agentGuess = []
-        agentProfile = [i,reliability,agentKnowledge,agentHypotheses,agentGuess]
+        lastAction = "null"
+        agentProfile = [i,reliability,agentKnowledge,agentHypotheses,agentGuess, lastAction]
         agentArray.append(agentProfile)
     return agentArray
 
@@ -76,18 +77,17 @@ def transitiveDeduction(agentProfile):
     # Function which checks through an agents knowledge base and identifies
     # if any obvious transitive deductions can be made in the form:
     # {x < y, b < x} -> {b < y}
-    [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess] = agentProfile
-    for i in range(len(agentKnowledge)):
-        if agentKnowledge[i][1] == "<":
-            for j in range(len(agentKnowledge)):
-                if agentKnowledge[j][1] == "<":
+    for i in range(len(agentProfile[2])):
+        if agentProfile[2][i][1] == "<":
+            for j in range(len(agentProfile[2])):
+                if agentProfile[2][j][1] == "<":
                     if i != j:
-                        if agentKnowledge[i][0] == agentKnowledge[j][2]:
+                        if agentProfile[2][i][0] == agentProfile[2][j][2]:
                             # {x < y, b < x} -> {b < y}
                             combinedProb = 1 #placeholder
-                            newKnowledge = [agentKnowledge[j][0],"<",agentKnowledge[i][2],combinedProb,[str(agentID) + "["+str(i)+"]"+"["+str(j)+"]"]]
-                            agentKnowledge = checkKnowledge(agentKnowledge,newKnowledge,agentProfile[0])
-    return [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess]
+                            newKnowledge = [agentProfile[2][j][0],"<",agentProfile[2][i][2],combinedProb,[str(agentProfile[0]) + "["+str(i)+"]"+"["+str(j)+"]"]]
+                            agentProfile[2] = checkKnowledge(agentProfile[2],newKnowledge,agentProfile[0])
+    return agentProfile
 
 def checkKnowledge(agentKnowledge, newKnowledge, agentID):
     # Function that checks that the knowledge about to be learned is novel,
@@ -112,17 +112,16 @@ def genHypotheses(agentProfile, theTruth):
     # A hypothesis exists in the form:
     #       [element,"=",position,agentBeleif,evidence]
     # where the evidence is a list of indexes for knowledge in the agentKnowledge.
-    [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess] = agentProfile
-    newHypothesis = [] # Reset hypotheses.
+    newHypothesis = [] # Gen new hypotheses.
     for i in theTruth:
         lessThans = 0
         greaterThans = 0
         hypothesisEvidence = []
-        for j in range(len(agentKnowledge)):
-            if agentKnowledge[j][0] == i:
+        for j in range(len(agentProfile[2])):
+            if agentProfile[2][j][0] == i:
                 lessThans += 1
                 hypothesisEvidence.append(j)
-            elif agentKnowledge[j][2] == i:
+            elif agentProfile[2][j][2] == i:
                 greaterThans += 1
                 hypothesisEvidence.append(j)
         k = 0
@@ -136,7 +135,9 @@ def genHypotheses(agentProfile, theTruth):
             newHypothesis.append([i,"=",k,0,hypothesisEvidence])
             k+=1
     agentGuess = guessTheTruth(newHypothesis, theTruth)
-    return [agentID, agentReliability, agentKnowledge, newHypothesis, agentGuess]
+    agentProfile[3] = newHypothesis
+    agentProfile[4] = agentGuess
+    return agentProfile
 
 def guessTheTruth(myHypothesis, theTruth):
     # A function that given a hypothesis, will create a possible ordering.
@@ -171,10 +172,14 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
     whatToDo = random.uniform(0,1)
     if whatToDo < 0.0:
         agentProfile = meetAgent(agentProfile, agentArray)
+        agentProfile[5] = "meet"
     elif whatToDo > 0.9:
         agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth)
+        agentProfile[5] = "test"
     else:
-        agentProfile = agentThink(agentProfile, theTruth)
+        if agentProfile[5] != "thought":
+            agentProfile = agentThink(agentProfile, theTruth)
+            agentProfile[5] = "thought"
     return agentProfile
 
 
