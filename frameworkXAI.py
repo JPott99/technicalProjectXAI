@@ -57,6 +57,8 @@ def invertKnowledge(knowledgeBit):
     return knowledgeBit
 
 def meetAgent(agentProfile, agentArray):
+    # A function that represents the agent being told a hypothesis, and given
+    # evidence for why it is beleived.
     otherAgentID = agentProfile[0]
     while otherAgentID == agentProfile[0]:
         otherAgentID = random.randint(0,len(agentArray)-1)
@@ -105,6 +107,11 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
     return agentKnowledge
 
 def genHypotheses(agentProfile, theTruth):
+    # A function that takes the knowledge of an agent, and converts it into
+    # hypotheses about the position of each element in the truth.
+    # A hypothesis exists in the form:
+    #       [element,"=",position,agentBeleif,evidence]
+    # where the evidence is a list of indexes for knowledge in the agentKnowledge.
     [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess] = agentProfile
     newHypothesis = [] # Reset hypotheses.
     for i in theTruth:
@@ -128,11 +135,12 @@ def genHypotheses(agentProfile, theTruth):
         while k < len(theTruth):
             newHypothesis.append([i,"=",k,0,hypothesisEvidence])
             k+=1
-
     agentGuess = guessTheTruth(newHypothesis, theTruth)
     return [agentID, agentReliability, agentKnowledge, newHypothesis, agentGuess]
 
 def guessTheTruth(myHypothesis, theTruth):
+    # A function that given a hypothesis, will create a possible ordering.
+    # Currently treats each position as independent.
     myGuess = []
     for i in range(len(theTruth)):
         optionsList = []
@@ -171,13 +179,14 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
 
 
 def checkAgentGuessAccuracy(myGuess,theTruth):
+    # A function that compares the accuracy of an agents guess against the truth.
     guessAccuracy = 0
     for i in range(len(myGuess)):
         if myGuess[i]==theTruth[i]:
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
 
-theTruth = "123"#list(string.ascii_lowercase)
+theTruth = "12345"#list(string.ascii_lowercase)
 environmentReliability = 1
 agentArray = genAgents(50)
 counter  = 0
@@ -188,7 +197,7 @@ while continueLooping == True:
         agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth)
         guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
     counter+=1
-    if guessAccuracy>0.85:
+    if guessAccuracy>0.9999:
         continueLooping = False
         print(guessAccuracy)
         print(counter)
