@@ -67,6 +67,7 @@ def meetAgent(agentProfile, agentArray):
     chosenHypothesis = random.choice(otherAgentProfile[3])
     for i in range(len(chosenHypothesis[4])):
         newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]]
+        newKnowledge[3] = newKnowledge[3]*otherAgentProfile[1]
         willIScrewUp = random.uniform(0,1)
         if willIScrewUp > otherAgentProfile[1]:
             newKnowledge = invertKnowledge(newKnowledge)
@@ -84,7 +85,7 @@ def transitiveDeduction(agentProfile):
                     if i != j:
                         if agentProfile[2][i][0] == agentProfile[2][j][2]:
                             # {x < y, b < x} -> {b < y}
-                            combinedProb = 1 #placeholder
+                            combinedProb = agentProfile[2][i][3]*agentProfile[2][i][3]
                             newKnowledge = [agentProfile[2][j][0],"<",agentProfile[2][i][2],combinedProb,[str(agentProfile[0]) + "["+str(i)+"]"+"["+str(j)+"]"]]
                             agentProfile[2] = checkKnowledge(agentProfile[2],newKnowledge,agentProfile[0])
     return agentProfile
@@ -119,10 +120,10 @@ def genHypotheses(agentProfile, theTruth):
         hypothesisEvidence = []
         for j in range(len(agentProfile[2])):
             if agentProfile[2][j][0] == i:
-                lessThans += 1
+                lessThans += agentProfile[2][j][3]
                 hypothesisEvidence.append(j)
             elif agentProfile[2][j][2] == i:
-                greaterThans += 1
+                greaterThans += agentProfile[2][j][3]
                 hypothesisEvidence.append(j)
         k = 0
         while k < greaterThans:
@@ -191,7 +192,7 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
 
-theTruth = "12345"#list(string.ascii_lowercase)
+theTruth = "123456789" #list(string.ascii_lowercase)
 environmentReliability = 1
 agentArray = genAgents(50)
 counter  = 0
@@ -202,11 +203,11 @@ while continueLooping == True:
         agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth)
         guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
     counter+=1
-    if guessAccuracy>0.9999:
+    if guessAccuracy>0.80:
         continueLooping = False
         print(guessAccuracy)
         print(counter)
-    if counter >1000:
+    if counter >10000:
         continueLooping = False
         print(guessAccuracy)
 for i in agentArray:
