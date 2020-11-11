@@ -64,14 +64,15 @@ def meetAgent(agentProfile, agentArray):
     while otherAgentID == agentProfile[0]:
         otherAgentID = random.randint(0,len(agentArray)-1)
     otherAgentProfile = agentArray[otherAgentID]
-    chosenHypothesis = random.choice(otherAgentProfile[3])
-    for i in range(len(chosenHypothesis[4])):
-        newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]]
-        newKnowledge[3] = newKnowledge[3]*otherAgentProfile[1]
-        willIScrewUp = random.uniform(0,1)
-        if willIScrewUp > otherAgentProfile[1]:
-            newKnowledge = invertKnowledge(newKnowledge)
-        agentProfile[2] = checkKnowledge(agentProfile[2], newKnowledge, agentProfile[0])
+    if otherAgentProfile[3] != []:
+        chosenHypothesis = random.choice(otherAgentProfile[3])
+        for i in range(len(chosenHypothesis[4])):
+            newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]]
+            newKnowledge[3] = newKnowledge[3]*otherAgentProfile[1]
+            willIScrewUp = random.uniform(0,1)
+            if willIScrewUp > otherAgentProfile[1]:
+                newKnowledge = invertKnowledge(newKnowledge)
+            agentProfile[2] = checkKnowledge(agentProfile[2], newKnowledge, agentProfile[0])
     return agentProfile
 
 def transitiveDeduction(agentProfile):
@@ -120,10 +121,10 @@ def genHypotheses(agentProfile, theTruth):
         hypothesisEvidence = []
         for j in range(len(agentProfile[2])):
             if agentProfile[2][j][0] == i:
-                lessThans += agentProfile[2][j][3]
+                lessThans += 1
                 hypothesisEvidence.append(j)
             elif agentProfile[2][j][2] == i:
-                greaterThans += agentProfile[2][j][3]
+                greaterThans += 1
                 hypothesisEvidence.append(j)
         k = 0
         while k < greaterThans:
@@ -166,15 +167,15 @@ def agentThink(agentProfile, theTruth):
     agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
-def agentAction(agentProfile, environmentReliability, agentArray, theTruth):
+def agentAction(agentProfile, environmentReliability, agentArray, theTruth, chatChance, testChance):
     # Function to represent an agent deciding what to do, currently choosing to
     # learn from either the environment or another agent, or to think through
     # their existing knowledge
     whatToDo = random.uniform(0,1)
-    if whatToDo < 0.0:
+    if whatToDo < chatChance:
         agentProfile = meetAgent(agentProfile, agentArray)
         agentProfile[5] = "meet"
-    elif whatToDo > 0.9:
+    elif whatToDo > 1-testChance:
         agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth)
         agentProfile[5] = "test"
     else:
@@ -194,13 +195,13 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
 
 theTruth = "123456789" #list(string.ascii_lowercase)
 environmentReliability = 1
-agentArray = genAgents(50)
+agentArray = genAgents(7)
 counter  = 0
 continueLooping = True
 while continueLooping == True:
     guessAccuracy = 0
     for i in range(len(agentArray)):
-        agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth)
+        agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, 0.1)
         guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
     counter+=1
     if guessAccuracy>0.80:
