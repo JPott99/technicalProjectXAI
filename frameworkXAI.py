@@ -23,7 +23,7 @@ def genAgents(numOfAgents):
 def defineReliability():
     # A function that determines reliability of any agent.
     # Currently included for future use, so defaults to 1.
-    return 1
+    return 0.99
 
 def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     # Function that gives a given agent knowledge of a given reliability.
@@ -67,7 +67,7 @@ def meetAgent(agentProfile, agentArray):
     if otherAgentProfile[3] != []:
         chosenHypothesis = random.choice(otherAgentProfile[3])
         for i in range(len(chosenHypothesis[4])):
-            newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]]
+            newKnowledge = otherAgentProfile[2][chosenHypothesis[4][i]][:]
             newKnowledge[3] = newKnowledge[3]*otherAgentProfile[1]
             willIScrewUp = random.uniform(0,1)
             if willIScrewUp > otherAgentProfile[1]:
@@ -114,32 +114,64 @@ def genHypotheses(agentProfile, theTruth):
     # A hypothesis exists in the form:
     #       [element,"=",position,agentBeleif,evidence]
     # where the evidence is a list of indexes for knowledge in the agentKnowledge.
-    newHypothesis = [] # Gen new hypotheses.
+    newHypothesis = []
     for i in theTruth:
-        lessThans = 0
-        greaterThans = 0
         hypothesisEvidence = []
+        relevantKnowledge= []
         for j in range(len(agentProfile[2])):
-            if agentProfile[2][j][0] == i:
-                lessThans += 1
-                hypothesisEvidence.append(j)
-            elif agentProfile[2][j][2] == i:
-                greaterThans += 1
-                hypothesisEvidence.append(j)
-        k = 0
-        while k < greaterThans:
-            newHypothesis.append([i,"=",k,0,hypothesisEvidence])
-            k+=1
-        while k < len(theTruth)-lessThans:
-            newHypothesis.append([i,"=",k,1/(len(theTruth)-greaterThans-lessThans),hypothesisEvidence])
-            k+=1
-        while k < len(theTruth):
-            newHypothesis.append([i,"=",k,0,hypothesisEvidence])
-            k+=1
+            if agentProfile[2][j][0] == i or agentProfile[2][j][2] == i:
+                hypothesisEvidence+=[j]
+                relevantKnowledge += [[agentProfile[2][j][0],"<",agentProfile[2][j][2],agentProfile[2][j][3]]]
+        possibleWorlds = [[]]
+        for j in relevantKnowledge:
+            trueWorld = possibleWorlds.copy()
+            falseWorld = []
+            for k in possibleWorlds:
+                falseWorld.append(k.copy())
+            for k in range(len(possibleWorlds)):
+                trueWorld[k].append(j)
+                falseWorld[k].append(notTrue(j))
+            possibleWorlds = trueWorld + falseWorld
+        possibleHypotheses = []
+        for j in possibleWorlds:
+            possibleHypotheses.append(makeAHypothesis(j,i, theTruth))
+        for j in range(len(possibleHypotheses[0])):
+            weightedProb = 0
+            for k in range(len(possibleHypotheses)):
+                weightedProb += possibleHypotheses[k][j][3]
+            if weightedProb == 0:
+                weightedProb = 0.000000001
+            newHypothesis.append([i,"=",j,weightedProb,hypothesisEvidence])
     agentGuess = guessTheTruth(newHypothesis, theTruth)
     agentProfile[3] = newHypothesis
     agentProfile[4] = agentGuess
     return agentProfile
+
+def notTrue(knowledge):
+    return [knowledge[2],"<",knowledge[0], 1-knowledge[3]]
+
+def makeAHypothesis(knowledgeSet,i, theTruth):
+    groupWeighting = 1
+    lessThans = 0
+    greaterThans = 0
+    for j in knowledgeSet:
+        groupWeighting = groupWeighting*j[3]
+        if j[0] == i:
+            lessThans += 1
+        elif j[2] == i:
+            greaterThans += 1
+    k = 0
+    myHypothesis = []
+    while k < greaterThans:
+        myHypothesis.append([i,"=",k,0])
+        k+=1
+    while k < len(theTruth)-lessThans:
+        myHypothesis.append([i,"=",k,groupWeighting/(len(theTruth)-greaterThans-lessThans)])
+        k+=1
+    while k < len(theTruth):
+        myHypothesis.append([i,"=",k,0])
+        k+=1
+    return myHypothesis
 
 def guessTheTruth(myHypothesis, theTruth):
     # A function that given a hypothesis, will create a possible ordering.
@@ -152,6 +184,8 @@ def guessTheTruth(myHypothesis, theTruth):
             if i == j[2] and j[3] > 0:
                 optionsList.append(j[0])
                 optionProbs.append(j[3])
+        if optionProbs == []:
+            print(myHypothesis)
         bestProb = max(optionProbs)
         bestOptions = []
         for i in range(len(optionProbs)):
@@ -193,9 +227,9 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
 
-theTruth = "123456789" #list(string.ascii_lowercase)
-environmentReliability = 1
-agentArray = genAgents(7)
+theTruth = "123" #list(string.ascii_lowercase)
+environmentReliability = 0.99
+agentArray = genAgents(50)
 counter  = 0
 continueLooping = True
 while continueLooping == True:
@@ -207,9 +241,10 @@ while continueLooping == True:
     if guessAccuracy>0.80:
         continueLooping = False
         print(guessAccuracy)
-        print(counter)
+        print(counter-1)
     if counter >10000:
+        print("TIME OUT!")
         continueLooping = False
         print(guessAccuracy)
-for i in agentArray:
-    print(i)
+# for i in agentArray:
+#     print(i)
