@@ -1,4 +1,3 @@
-import string
 import random
 
 def genAgents(numOfAgents):
@@ -18,12 +17,6 @@ def genAgents(numOfAgents):
         agentProfile = [i,reliability,agentKnowledge,agentHypotheses,agentGuess, lastAction]
         agentArray.append(agentProfile)
     return agentArray
-
-
-def defineReliability():
-    # A function that determines reliability of any agent.
-    # Currently included for future use, so defaults to 1.
-    return 0.99
 
 def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     # Function that gives a given agent knowledge of a given reliability.
@@ -95,15 +88,24 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
     # Function that checks that the knowledge about to be learned is novel,
     # and if not checks if it is more beleived than the existing knowledge
     # and replaces the knowledge if so.
+    newKnowledge = newKnowledge[:]
     for i in agentKnowledge:
-        if i[0] == newKnowledge[0]:
-            if i[2] == newKnowledge[2]:
-                if i[3]>=newKnowledge[3]:
-                    return agentKnowledge
-                else:
-                    i[3] = newKnowledge[3]
-                    i[4] = newKnowledge[4]
-                    return agentKnowledge
+        if i[0] == newKnowledge[0] and i[2] == newKnowledge[2]:
+            if i[3]>=newKnowledge[3]:
+                return agentKnowledge
+            else:
+                i[3] = newKnowledge[3]
+                i[4] = newKnowledge[4][:]+[agentID]
+                return agentKnowledge
+        if i[2] == newKnowledge[0] and i[0] == newKnowledge[2]:
+            if i[3]>=newKnowledge[3]:
+                return agentKnowledge
+            else:
+                i[0] = newKnowledge[2]
+                i[2] = newKnowledge[0]
+                i[3] = newKnowledge[3]
+                i[4] = newKnowledge[4][:]+[agentID]
+                return agentKnowledge
     newKnowledge[4].append(agentID)
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
@@ -139,8 +141,6 @@ def genHypotheses(agentProfile, theTruth):
             weightedProb = 0
             for k in range(len(possibleHypotheses)):
                 weightedProb += possibleHypotheses[k][j][3]
-            if weightedProb == 0:
-                weightedProb = 0.000000001
             newHypothesis.append([i,"=",j,weightedProb,hypothesisEvidence])
     agentGuess = guessTheTruth(newHypothesis, theTruth)
     agentProfile[3] = newHypothesis
@@ -184,8 +184,6 @@ def guessTheTruth(myHypothesis, theTruth):
             if i == j[2] and j[3] > 0:
                 optionsList.append(j[0])
                 optionProbs.append(j[3])
-        if optionProbs == []:
-            print(myHypothesis)
         bestProb = max(optionProbs)
         bestOptions = []
         for i in range(len(optionProbs)):
@@ -227,24 +225,7 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
 
-theTruth = "123" #list(string.ascii_lowercase)
-environmentReliability = 0.99
-agentArray = genAgents(50)
-counter  = 0
-continueLooping = True
-while continueLooping == True:
-    guessAccuracy = 0
-    for i in range(len(agentArray)):
-        agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, 0.1)
-        guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
-    counter+=1
-    if guessAccuracy>0.80:
-        continueLooping = False
-        print(guessAccuracy)
-        print(counter-1)
-    if counter >10000:
-        print("TIME OUT!")
-        continueLooping = False
-        print(guessAccuracy)
-# for i in agentArray:
-#     print(i)
+def defineReliability():
+    # A function that determines reliability of any agent.
+    # Currently included for future use, so defaults to 1.
+    return 0.99
