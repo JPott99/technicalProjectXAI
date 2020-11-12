@@ -18,6 +18,11 @@ def genAgents(numOfAgents):
         agentArray.append(agentProfile)
     return agentArray
 
+def defineReliability():
+    # A function that determines reliability of any agent.
+    # Currently included for future use, so defaults to 1.
+    return 1
+
 def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     # Function that gives a given agent knowledge of a given reliability.
     # The knowledge is a statement comparing the positions of 2 letters of the
@@ -224,8 +229,3 @@ def checkAgentGuessAccuracy(myGuess,theTruth):
         if myGuess[i]==theTruth[i]:
             guessAccuracy += 1/len(myGuess)
     return guessAccuracy
-
-def defineReliability():
-    # A function that determines reliability of any agent.
-    # Currently included for future use, so defaults to 1.
-    return 0.99

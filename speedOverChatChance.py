@@ -7,7 +7,8 @@ timeArray = []
 loops = 500
 for i in range(loops):
     timeArrayAvg = []
-    for j in range(10):
+    subloops = 1
+    for j in range(subloops):
         agentArray = genAgents(50)
         counter  = 0
         continueLooping = True
@@ -15,7 +16,7 @@ for i in range(loops):
         while continueLooping == True:
             guessAccuracy = 0
             for i in range(len(agentArray)):
-                agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, i/loops*2, 0.1)
+                agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, i/(loops*2), 0.1)
                 guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
             guessAccuracies.append(guessAccuracy)
             counter+=1
@@ -25,7 +26,7 @@ for i in range(loops):
             if counter >1000:
                 timeArrayAvg.append(counter)
                 continueLooping = False
-    timeArray.append(sum(timeArrayAvg)/10)
+    timeArray.append(sum(timeArrayAvg)/subloops)
     # for i in agentArray:
     #     print(i)
 plt.plot(np.linspace(0,0.49,loops),timeArray)
