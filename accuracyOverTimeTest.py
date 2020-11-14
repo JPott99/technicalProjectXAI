@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 theTruth = "1234567" #list(string.ascii_lowercase)
 environmentReliability = 0.99
-agentArray = genAgents(50)
+agentArray = genAgents(50, 0.99)
 counter  = 0
 continueLooping = True
 guessAccuracies = []
@@ -18,8 +18,8 @@ while continueLooping == True:
         continueLooping = False
         print(guessAccuracy)
         print(counter-1)
-    if counter >10000:
-        print("TIME OUT!")
+    if counter >1000:
+        print("TiME OUT!")
         continueLooping = False
         print(guessAccuracy)
 # for i in agentArray:

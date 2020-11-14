@@ -4,12 +4,13 @@ import numpy as np
 theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 1
 timeArray = []
-loops = 100
-for i in range(loops):
+loops = 50
+for k in range(loops):
+    k+=2
     timeArrayAvg = []
     subloops = 10
     for j in range(subloops):
-        agentArray = genAgents(loops)
+        agentArray = genAgents(k,1)
         counter  = 0
         continueLooping = True
         guessAccuracies = []

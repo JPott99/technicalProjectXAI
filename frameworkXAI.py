@@ -1,6 +1,6 @@
 import random
 
-def genAgents(numOfAgents):
+def genAgents(numOfAgents, agentReliability):
     # Function that generates a list containing a given number of agents.
     # Agent Form:
     #       [agentID, agentReliability, agentKnowledge, agentHypotheses, agentGuess, lastAction]
@@ -9,19 +9,13 @@ def genAgents(numOfAgents):
     # agentHypotheses and agentGuess are empty arrays, at time of agent generation.
     agentArray = []
     for i in range(numOfAgents):
-        reliability = defineReliability()
         agentKnowledge = []
         agentHypotheses = []
         agentGuess = []
         lastAction = "null"
-        agentProfile = [i,reliability,agentKnowledge,agentHypotheses,agentGuess, lastAction]
+        agentProfile = [i,agentReliability,agentKnowledge,agentHypotheses,agentGuess, lastAction]
         agentArray.append(agentProfile)
     return agentArray
-
-def defineReliability():
-    # A function that determines reliability of any agent.
-    # Currently included for future use, so defaults to 1.
-    return 1
 
 def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     # Function that gives a given agent knowledge of a given reliability.

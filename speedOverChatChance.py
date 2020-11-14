@@ -1,26 +1,26 @@
 from frameworkXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
-theTruth = "12345" #list(string.ascii_lowercase)
-environmentReliability = 1
+theTruth = "1234567" #list(string.ascii_lowercase)
+environmentReliability = 0.99
 timeArray = []
-loops = 500
-for i in range(loops):
+loops = 50
+for k in range(loops):
     timeArrayAvg = []
-    subloops = 1
+    subloops = 10
     for j in range(subloops):
-        agentArray = genAgents(50)
+        agentArray = genAgents(50,1)
         counter  = 0
         continueLooping = True
         guessAccuracies = []
         while continueLooping == True:
             guessAccuracy = 0
             for i in range(len(agentArray)):
-                agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, i/(loops*2), 0.1)
+                agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, k/(loops*2), 0.1)
                 guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
             guessAccuracies.append(guessAccuracy)
             counter+=1
-            if guessAccuracy>0.75:
+            if guessAccuracy>0.7:
                 continueLooping = False
                 timeArrayAvg.append(counter)
             if counter >1000:
@@ -29,5 +29,6 @@ for i in range(loops):
     timeArray.append(sum(timeArrayAvg)/subloops)
     # for i in agentArray:
     #     print(i)
-plt.plot(np.linspace(0,0.49,loops),timeArray)
+print(timeArray)
+plt.plot(np.linspace(0,0.5,loops),timeArray)
 plt.show()
