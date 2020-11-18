@@ -1,7 +1,7 @@
 from frameworkXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
-theTruth = "1234567" #list(string.ascii_lowercase)
+theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 0.99
 timeArray = []
 loops = 50
@@ -29,6 +29,5 @@ for k in range(loops):
     timeArray.append(sum(timeArrayAvg)/subloops)
     # for i in agentArray:
     #     print(i)
-print(timeArray)
 plt.plot(np.linspace(0,0.5,loops),timeArray)
 plt.show()
