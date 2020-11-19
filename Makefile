@@ -5,3 +5,5 @@ all:
 	python chatChanceVsAgentRel.py $(folderName)
 	python testChanceVsEnvRel.py $(folderName)
 	python truthLenVagentCount.py $(folderName)
+	python agentRelVenvRel.py $(folderName)
+	
