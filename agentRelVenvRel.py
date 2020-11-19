@@ -4,10 +4,11 @@ import numpy as np
 import sys
 
 folderName = sys.argv[1]
+
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArray = []
 loops0 = 10
-for k in range(loops0):
+for k in range(loops0+1):
     loops1=10
     innerArray = []
     for l in range(loops1+1):
@@ -15,14 +16,14 @@ for k in range(loops0):
         environmentReliability = 0.9+l*0.1/loops1
         subloops = 10
         for j in range(subloops):
-            agentArray = genAgents(50,1)
+            agentArray = genAgents(50, 0.9+l*0.1/loops0)
             counter  = 0
             continueLooping = True
             guessAccuracies = []
             while continueLooping == True:
                 guessAccuracy = 0
                 for i in range(len(agentArray)):
-                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, (k+1)*0.49/loops0)
+                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, 0.1)
                     guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
                 guessAccuracies.append(guessAccuracy)
                 counter+=1
@@ -36,10 +37,10 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.9,1,0.49/loops0,0.49],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.9,1,0.9,1],aspect='auto')
 plt.colorbar()
-plt.ylabel("Chance to Ask Environment")
+plt.ylabel("Chance of Agent sharing correct info")
 plt.xlabel("Chance of Environment sharing correct info")
-plt.title("Heatmap comparing Test Chance and Agent Reliability.")
-plt.savefig("Graphs/"+folderName+"/heatMapTestVEnvRel.png")
+plt.title("Heatmap comparing Environmental and Agent Reliability.")
+plt.savefig("Graphs/"+folderName+"/heatMapAgentRelVEnvRel.png")
 #plt.show()

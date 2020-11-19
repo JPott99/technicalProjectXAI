@@ -1,6 +1,9 @@
 from frameworkXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
+import sys
+
+folderName = sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 0.99
@@ -32,7 +35,6 @@ for k in range(loops0):
                     continueLooping = False
         innerArray.append(sum(timeArrayAvg)/subloops)
     timeArray.append(innerArray)
-    print(k)
     # for i in agentArray:
     #     print(i)#
 plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[(0+1)*0.49/loops1,0.49,0,0.49],aspect='auto')
@@ -40,5 +42,5 @@ plt.colorbar()
 plt.ylabel("Chance to Ask another Agent")
 plt.xlabel("Chance to Ask Environment")
 plt.title("Heatmap comparing Chat Chance and Environment chance.")
-plt.savefig("Graphs/v1 Zealous/heatMapChatVTest.png")
-plt.show()
+plt.savefig("Graphs/"+folderName+"/heatMapChatVTest.png")
+#plt.show()
