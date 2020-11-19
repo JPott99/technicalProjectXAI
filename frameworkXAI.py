@@ -27,14 +27,25 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     # assumed that agents know the reliability of the environment) and
     # knowledge is a list of where knowledge has come from, in this case
     # originating from "E", the environment, and passed to agentID.
-    firstLetter = random.randint(0,len(theTruth)-1)
-    otherLetter = firstLetter
-    while otherLetter == firstLetter:
-        otherLetter = random.randint(0,len(theTruth)-1)
-    if firstLetter < otherLetter:
-        impartedWisdom = [theTruth[firstLetter],"<",theTruth[otherLetter], environmentReliability, ["E"]]
+    whichTest = random.uniform(0,1)
+    if whichTest < 0.0 or agentProfile[2]==[]:
+        firstLetter = random.randint(0,len(theTruth)-1)
+        otherLetter = firstLetter
+        while otherLetter == firstLetter:
+            otherLetter = random.randint(0,len(theTruth)-1)
+        history = ["E"]
     else:
-        impartedWisdom = [theTruth[otherLetter],"<",theTruth[firstLetter], environmentReliability, ["E"]]
+        environmentReliability = environmentReliability*1.001
+        knowledgeToTest = random.choice(agentProfile[2])
+        print(theTruth)
+        firstLetter = theTruth.index(knowledgeToTest[0])
+        otherLetter = theTruth.index(knowledgeToTest[2])
+        print(firstLetter,otherLetter)
+        history = knowledgeToTest[4] + ["E"]
+    if firstLetter < otherLetter:
+        impartedWisdom = [theTruth[firstLetter],"<",theTruth[otherLetter], environmentReliability, history]
+    else:
+        impartedWisdom = [theTruth[otherLetter],"<",theTruth[firstLetter], environmentReliability, history]
     isMistDescended = random.uniform(0,1)
     if isMistDescended > environmentReliability:
         impartedWisdom = invertKnowledge(impartedWisdom)
@@ -100,8 +111,8 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
             if i[3]>=newKnowledge[3]:
                 return agentKnowledge
             else:
-                i[0] = newKnowledge[2]
-                i[2] = newKnowledge[0]
+                i[0] = newKnowledge[0]
+                i[2] = newKnowledge[2]
                 i[3] = newKnowledge[3]
                 i[4] = newKnowledge[4][:]+[agentID]
                 return agentKnowledge
