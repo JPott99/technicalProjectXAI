@@ -1,4 +1,4 @@
-folderName = "v3.2 Zealous Tester"
+folderName = "v4 Super Fickle"
 all:
 	python chatChanceSpeedVsAgentCountSpeed.py $(folderName)
 	python chatChanceSpeedVsTestChanceSpeed.py $(folderName)

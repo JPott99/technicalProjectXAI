@@ -97,14 +97,11 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
                 i[4] = newKnowledge[4][:]+[agentID]
                 return agentKnowledge
         if i[2] == newKnowledge[0] and i[0] == newKnowledge[2]:
-            if i[3]>newKnowledge[3]:
-                return agentKnowledge
-            else:
-                i[0] = newKnowledge[0]
-                i[2] = newKnowledge[2]
-                i[3] = newKnowledge[3]
-                i[4] = newKnowledge[4][:]+[agentID]
-                return agentKnowledge
+            i[0] = newKnowledge[0]
+            i[2] = newKnowledge[2]
+            i[3] = newKnowledge[3]
+            i[4] = newKnowledge[4][:]+[agentID]
+            return agentKnowledge
     newKnowledge[4].append(agentID)
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
@@ -180,7 +177,7 @@ def guessTheTruth(myHypothesis, theTruth):
         optionsList = []
         optionProbs = []
         for j in myHypothesis:
-            if i == j[2]:
+            if i == j[2] and j[3] > 0:
                 optionsList.append(j[0])
                 optionProbs.append(j[3])
         bestProb = max(optionProbs)
