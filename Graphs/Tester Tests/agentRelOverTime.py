@@ -11,6 +11,7 @@ theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayZ = []
 timeArrayF = []
 timeArrayT = []
+timeArrayTG = []
 timeArraySF = []
 loops = 20
 reliability = float(sys.argv[1])
