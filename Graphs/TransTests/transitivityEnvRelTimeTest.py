@@ -3,6 +3,8 @@ import transitiveCXAI
 from matplotlib import pyplot as plt
 import numpy as np
 import time
+import sys
+reliability = sys.float(sys.argv[1])
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayT = []
 timeArrayC = []
@@ -11,7 +13,7 @@ timeTimeC = []
 loops = 20
 for k in range(loops):
     print(k)
-    environmentReliability =  0.75+(k+1)/loops*0.25
+    environmentReliability =  0.7+(k+1)/loops*0.3
     timeArrayAvgT = []
     timeArrayAvgC = []
     timeTimeAvgT = []
@@ -19,7 +21,7 @@ for k in range(loops):
     subloops = 10
     for j in range(subloops):
         startTime = time.time()
-        agentReliability = 0.9
+        agentReliability = reliability
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
         agentArrayC = transitiveCXAI.genAgents(50,agentReliability)
         counter  = 0
@@ -53,12 +55,12 @@ for k in range(loops):
     timeArrayC.append(sum(timeTimeAvgC)/subloops)
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.25+0.75
+firstNo = 1/loops*0.3+0.7
 plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
 plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
-plt.legend(["Transitive","No Transitivity"])
+plt.legend(["Transitivity","No Transitivity"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Time to 75% (s)")
-plt.title("Graph comparing performance of Transitivity against Environmental Reliability")
-plt.savefig("envTransTimeTestAR90.png")
-plt.show()
+plt.title("Transitivity Performance against Environmental Reliability")
+plt.savefig("envTransTimeTestAR"+str(int(100*reliability))+".png")
+# plt.show()

@@ -3,6 +3,8 @@ import transitiveCXAI
 from matplotlib import pyplot as plt
 import numpy as np
 import time
+import sys
+reliability = float(sys.argv[1])
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayT = []
 timeArrayC = []
@@ -11,7 +13,7 @@ timeTimeC = []
 loops = 20
 for k in range(loops):
     print(k)
-    environmentReliability = 0.9
+    environmentReliability = reliability
     timeArrayAvgT = []
     timeArrayAvgC = []
     timeTimeAvgT = []
@@ -56,9 +58,9 @@ for k in range(loops):
 firstNo = 1/loops*0.5+0.5
 plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
 plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
-plt.legend(["Transitive","No Transitivity"])
+plt.legend(["Transitivity","No Transitivity"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Time to 75% (s)")
-plt.title("Graph comparing performance of Transitivity against Agent Reliability")
-plt.savefig("agentTransTimeTestER90.png")
-plt.show()
+plt.title("Transitivity Performance against Agent Reliability")
+plt.savefig("agentTransTimeTestER"+str(int(100*reliability))+".png")
+# plt.show()
