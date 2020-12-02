@@ -8,7 +8,7 @@ timeArrayC = []
 loops = 20
 for k in range(loops):
     print(k)
-    environmentReliability = 0.9
+    environmentReliability = 0.99
     timeArrayAvgT = []
     timeArrayAvgC = []
     subloops = 10
@@ -50,5 +50,5 @@ plt.legend(["Transitive","No Transitivity"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Graph comparing performance of Transitivity against Agent Reliability")
-plt.savefig("Graphs/TransTests/agentTransTestER90.png")
+plt.savefig("agentTransTestER99.png")
 plt.show()

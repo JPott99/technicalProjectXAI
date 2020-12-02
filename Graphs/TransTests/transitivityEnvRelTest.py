@@ -8,12 +8,12 @@ timeArrayC = []
 loops = 20
 for k in range(loops):
     print(k)
-    environmentReliability = 0.8+(k+1)/loops*0.2
+    environmentReliability = 0.75+(k+1)/loops*0.25
     timeArrayAvgT = []
     timeArrayAvgC = []
-    subloops = 10
+    subloops = 15
     for j in range(subloops):
-        agentReliability = 0.9
+        agentReliability = 1
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
         agentArrayC = transitiveCXAI.genAgents(50,agentReliability)
         counter  = 0
@@ -43,12 +43,12 @@ for k in range(loops):
     timeArrayC.append(sum(timeArrayAvgC)/subloops)
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.2+0.8
+firstNo = 1/loops*0.25+0.75
 plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
 plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
 plt.legend(["Transitive","No Transitivity"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
-plt.title("Graph comparing performance of Transitivity against Environmental Reliability")
-plt.savefig("Graphs/TransTests/envTransTestAR90.png")
+plt.title("Transitivity Performance against Environmental Reliability")
+plt.savefig("envTransTestAR100.png")
 plt.show()
