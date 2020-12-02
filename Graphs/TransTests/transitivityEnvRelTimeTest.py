@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import time
 import sys
-reliability = sys.float(sys.argv[1])
+reliability = float(sys.argv[1])
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayT = []
 timeArrayC = []
