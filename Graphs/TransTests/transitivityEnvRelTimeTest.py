@@ -22,6 +22,8 @@ for k in range(loops):
     for j in range(subloops):
         startTime = time.time()
         agentReliability = reliability
+        timeT = 0
+        timeC = 0
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
         agentArrayC = transitiveCXAI.genAgents(50,agentReliability)
         counter  = 0
@@ -30,26 +32,30 @@ for k in range(loops):
             guessAccuracyT = 0
             guessAccuracyC = 0
             for i in range(len(agentArrayT)):
+                startTime = time.time()
                 agentArrayT[i] = transitiveXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.5, 0.1)
                 guessAccuracyT += transitiveXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
+                timeT += time.time() - startTime
+                startTime = time.time()
                 agentArrayC[i] = transitiveCXAI.agentAction(agentArrayC[i], environmentReliability, agentArrayC, theTruth, 0.5, 0.1)
                 guessAccuracyC += transitiveCXAI.checkAgentGuessAccuracy(agentArrayC[i][4],theTruth)/len(agentArrayC)
+                timeC += time.time() - startTime
             counter+=1
             if guessAccuracyT>0.75 and len(timeArrayAvgT)==j:
                 timeArrayAvgT.append(counter)
-                timeTimeAvgT.append(time.time()-startTime)
+                timeTimeAvgT.append(timeT)
             if guessAccuracyC>0.75 and len(timeArrayAvgC)==j:
                 timeArrayAvgC.append(counter)
-                timeTimeAvgC.append(time.time()-startTime)
+                timeTimeAvgC.append(timeC)
             if len(timeArrayAvgT+timeArrayAvgC) == 2*(j+1):
                 continueLooping = False
             if counter >1000:
                 if len(timeArrayAvgT)==j:
                     timeArrayAvgT.append(counter)
-                    timeTimeAvgT.append(time.time()-startTime)
+                    timeTimeAvgT.append(timeT)
                 if len(timeArrayAvgC)==j:
                     timeArrayAvgC.append(counter)
-                    timeTimeAvgC.append(time.time()-startTime)
+                    timeTimeAvgC.append(timeC)
                 continueLooping = False
     timeArrayT.append(sum(timeTimeAvgT)/subloops)
     timeArrayC.append(sum(timeTimeAvgC)/subloops)
