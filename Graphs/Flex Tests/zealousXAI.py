@@ -105,7 +105,7 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
                 i[3] = newKnowledge[3]
                 i[4] = newKnowledge[4][:]+[agentID]
                 return agentKnowledge
-    newKnowledge[4].append(agentID)
+    newKnowledge[4] = newKnowledge[4][:]+[agentID]
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
 

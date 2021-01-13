@@ -105,7 +105,7 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
                 i[3] = newKnowledge[3]
                 i[4] = newKnowledge[4][:]+[agentID]
                 return agentKnowledge
-    newKnowledge[4].append(agentID)
+    newKnowledge[4]= newKnowledge[4][:]+[agentID]
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
 
@@ -194,7 +194,7 @@ def guessTheTruth(myHypothesis, theTruth):
 
 def agentThink(agentProfile, theTruth):
     # Function to represent an agent thinking through their knowledge.
-    agentProfile = transitiveDeduction(agentProfile)
+    # agentProfile = transitiveDeduction(agentProfile)
     agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
