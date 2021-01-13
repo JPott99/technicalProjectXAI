@@ -1,9 +1,9 @@
-from frameworkXAI import *
+from zealousXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
 import sys
 
-folderName = sys.argv[1]
+# folderName = sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArray = []
@@ -13,10 +13,10 @@ for k in range(loops0+1):
     innerArray = []
     for l in range(loops1+1):
         timeArrayAvg = []
-        environmentReliability = 0.9+l*0.1/loops1
+        environmentReliability = 0.5+l*0.5/loops1
         subloops = 10
         for j in range(subloops):
-            agentArray = genAgents(50, 0.9+l*0.1/loops0)
+            agentArray = genAgents(50, 0.5+l*0.5/loops0)
             counter  = 0
             continueLooping = True
             guessAccuracies = []
@@ -37,10 +37,11 @@ for k in range(loops0+1):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.9,1,0.9,1],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.5,1,0.5,1],aspect='auto')
 plt.colorbar()
-plt.ylabel("Chance of Agent sharing correct info")
-plt.xlabel("Chance of Environment sharing correct info")
+plt.ylabel("Agent Reliability")
+plt.xlabel("Environmental Reliability")
 plt.title("Heatmap comparing Environmental and Agent Reliability.")
-plt.savefig("Graphs/"+folderName+"/heatMapAgentRelVEnvRel.png")
+# plt.savefig("Graphs/"+folderName+"/
+plt.savefig("heatMapAgentRelVEnvRel.png")
 #plt.show()
