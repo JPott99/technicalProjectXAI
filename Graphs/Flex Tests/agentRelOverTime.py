@@ -64,12 +64,8 @@ for k in range(loops):
                 timeArrayAvgZ.append(counter)
             if guessAccuracyF>0.75 and len(timeArrayAvgF)==j:
                 timeArrayAvgF.append(counter)
-            if agentReliability < 0.93:
-                if len(timeArrayAvgSF) == j:
-                    timeArrayAvgSF.append(1001)
-            else:
-                if guessAccuracySF>0.75 and len(timeArrayAvgSF)==j:
-                    timeArrayAvgSF.append(counter)
+            if guessAccuracySF>0.75 and len(timeArrayAvgSF)==j:
+                timeArrayAvgSF.append(counter)
             # print(timeArrayAvgSF)
             if len(timeArrayAvgZ+timeArrayAvgF+timeArrayAvgSF) == 3*(j+1):
                 continueLooping = False

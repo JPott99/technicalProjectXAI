@@ -194,7 +194,7 @@ def guessTheTruth(myHypothesis, theTruth):
 
 def agentThink(agentProfile, theTruth):
     # Function to represent an agent thinking through their knowledge.
-    agentProfile = transitiveDeduction(agentProfile)
+    # agentProfile = transitiveDeduction(agentProfile)
     agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
