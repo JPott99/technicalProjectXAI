@@ -1,8 +1,8 @@
 import csv
 import frameworkXAI
 
-def exportSim(agentArray):
-    with open('exportedAgentArray.csv', mode='w', newline = '') as exporter:
+def exportSim(agentArray, fileName = 'exportedAgentArray.csv'):
+    with open(fileName, mode='w', newline = '') as exporter:
         csvWriter = csv.writer(exporter, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for i in agentArray:
             csvWriter.writerow(i[0:2])
@@ -80,23 +80,23 @@ def importSim(fileName):
             currentAgent.append(currentData)
             lastWord = i[0]
     return agentArray
-
-
-
-
-theTruth = "12345" #list(string.ascii_lowercase)
-environmentReliability = 0.99
-agentArray = frameworkXAI.genAgents(50, 0.99)
-counter  = 0
-continueLooping = True
-while continueLooping == True:
-    guessAccuracy = 0
-    for i in range(len(agentArray)):
-        agentArray[i] = frameworkXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, 0.1)
-    counter+=1
-    if counter > 100:
-        continueLooping = False
-print(agentArray[0][:-1])
-exportSim(agentArray)
-agentArrayI = importSim("exportedAgentArray.csv")
-print(agentArrayI[0])
+#
+#
+# Testing code for import export functions.
+#
+# theTruth = "12345" #list(string.ascii_lowercase)
+# environmentReliability = 0.99
+# agentArray = frameworkXAI.genAgents(50, 0.99)
+# counter  = 0
+# continueLooping = True
+# while continueLooping == True:
+#     guessAccuracy = 0
+#     for i in range(len(agentArray)):
+#         agentArray[i] = frameworkXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.5, 0.1)
+#     counter+=1
+#     if counter > 100:
+#         continueLooping = False
+# print(agentArray[0][:-1])
+# exportSim(agentArray)
+# agentArrayI = importSim("exportedAgentArray.csv")
+# print(agentArrayI[0])
