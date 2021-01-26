@@ -105,7 +105,7 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
                 i[3] = newKnowledge[3]
                 i[4] = newKnowledge[4][:]+[agentID]
                 return agentKnowledge
-    newKnowledge[4] = newKnowledge[4][:]+[agentID]
+    newKnowledge[4].append(agentID)
     agentKnowledge.append(newKnowledge)
     return agentKnowledge
 
@@ -173,6 +173,8 @@ def makeAHypothesis(knowledgeSet,i, theTruth):
     return myHypothesis
 
 def guessTheTruth(myHypothesis, theTruth):
+    # A function that given a hypothesis, will create a possible ordering.
+    # Currently treats each position as independent.
     myGuess = [0]*len(theTruth)
     beleifMatrix = []
     counter = 0
@@ -204,25 +206,6 @@ def guessTheTruth(myHypothesis, theTruth):
                 beleifMatrix[i][bestPos] = 0
         counter+=1
     return myGuess
-
-    # A function that given a hypothesis, will create a possible ordering.
-    # Currently treats each position as independent.
-    # myGuess = []
-    # for i in range(len(theTruth)):
-    #     optionsList = []
-    #     optionProbs = []
-    #     for j in myHypothesis:
-    #         if i == j[2]:
-    #             optionsList.append(j[0])
-    #             optionProbs.append(j[3])
-    #     bestProb = max(optionProbs)
-    #     bestOptions = []
-    #     for i in range(len(optionProbs)):
-    #         if optionProbs[i] == bestProb:
-    #             bestOptions.append(i)
-    #     bestOption = random.choice(bestOptions)
-    #     myGuess.append(optionsList[bestOption])
-    # return myGuess
 
 def agentThink(agentProfile, theTruth):
     # Function to represent an agent thinking through their knowledge.
