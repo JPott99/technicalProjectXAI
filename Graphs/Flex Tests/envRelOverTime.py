@@ -7,10 +7,13 @@ import sys
 theTruth = "12345" #list(string.ascii_lowercase)
 reliability = float(sys.argv[1])
 timeArrayZ = []
+timeArrayZError = []
 timeArrayF = []
+timeArrayFError = []
 # timeArrayT = []
 timeArraySF = []
-loops = 20
+timeArraySFError = []
+loops = 25
 for k in range(loops):
     print(k)
     environmentReliability = 0.7+(k+1)/loops*0.3
@@ -18,7 +21,7 @@ for k in range(loops):
     timeArrayAvgF = []
     # timeArrayAvgT = []
     timeArrayAvgSF = []
-    subloops = 10
+    subloops = 25
     for j in range(subloops):
         agentRel = reliability
         agentArrayZ = zealousXAI.genAgents(50,agentRel)
@@ -63,15 +66,22 @@ for k in range(loops):
                     timeArrayAvgSF.append(counter)
                 continueLooping = False
     timeArrayZ.append(sum(timeArrayAvgZ)/subloops)
+    timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
-    # timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
+    #timeArrayT.append(sum(timeArrayAvgT)/subloops)
     timeArraySF.append(sum(timeArrayAvgSF)/subloops)
-    # for i in agentArray:
-    #     print(i)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayZ)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayF)
-# plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayT)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArraySF)
+    timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
+        # for i in agentArray:
+        #     print(i)
+firstNo = 1/loops*0.3+0.7
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayZ)
+plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
+plt.plot(x,timeArrayF)
+plt.fill_between(x,np.array(timeArrayF)-np.array(timeArrayFError),np.array(timeArrayF)+np.array(timeArrayFError), alpha = 0.5)
+plt.plot(x,timeArrayF)
+plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(timeArraySF)+np.array(timeArraySFError), alpha = 0.5)
 plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")

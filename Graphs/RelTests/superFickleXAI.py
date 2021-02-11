@@ -172,21 +172,36 @@ def makeAHypothesis(knowledgeSet,i, theTruth):
 def guessTheTruth(myHypothesis, theTruth):
     # A function that given a hypothesis, will create a possible ordering.
     # Currently treats each position as independent.
-    myGuess = []
-    for i in range(len(theTruth)):
-        optionsList = []
-        optionProbs = []
-        for j in myHypothesis:
-            if i == j[2]:
-                optionsList.append(j[0])
-                optionProbs.append(j[3])
-        bestProb = max(optionProbs)
-        bestOptions = []
-        for i in range(len(optionProbs)):
-            if optionProbs[i] == bestProb:
-                bestOptions.append(i)
-        bestOption = random.choice(bestOptions)
-        myGuess.append(optionsList[bestOption])
+    myGuess = [0]*len(theTruth)
+    beleifMatrix = []
+    counter = 0
+    currentRow = []
+    for i in myHypothesis:
+        counter += 1
+        currentRow.append(i[3])
+        if counter == len(theTruth):
+            beleifMatrix.append(currentRow)
+            currentRow = []
+            counter = 0
+    counter = 0
+    while counter < len(theTruth):
+        bestBeleifs = []
+        for i in beleifMatrix:
+            bestBeleifs.append(max(i))
+        bestBeleif = max(bestBeleifs)
+        bestIndex = bestBeleifs.index(bestBeleif)
+        bestPos = beleifMatrix[bestIndex].index(bestBeleif)
+        myGuess[bestPos] = myHypothesis[bestPos + len(theTruth)*bestIndex][0]
+        for i in range(len(beleifMatrix)):
+            removedProb = beleifMatrix[i][bestPos]
+            if removedProb != 1:
+                for j in range(len(beleifMatrix[i])):
+                    if i == bestIndex:
+                        beleifMatrix[i][j] = 0
+                    elif j != bestPos:
+                        beleifMatrix[i][j] = beleifMatrix[i][j]/(1-removedProb)
+                beleifMatrix[i][bestPos] = 0
+        counter+=1
     return myGuess
 
 def agentThink(agentProfile, theTruth):
