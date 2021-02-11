@@ -19,7 +19,6 @@ loops = int(sys.argv[2])
 reliability = float(sys.argv[1])
 for k in range(loops):
     agentReliability = 0.5+(k+1)/loops*0.5
-    print(k, agentReliability)
     environmentReliability = reliability
     timeArrayAvgZ = []
     timeArrayAvgF = []
