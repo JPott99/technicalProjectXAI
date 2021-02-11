@@ -113,6 +113,6 @@ plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(tim
 plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title("Performance of Agent flexibility against Agent Reliabilty")
+plt.title("Performance of Agent flexibility against $\it{A}$")
 plt.savefig("agentRelFlexTestER"+str(int(100*reliability))+".png")
 # plt.show()

@@ -4,33 +4,37 @@ import testerXAI
 import lessTesterXAI
 import zealousTesterXAI
 import greatTesterXAI
-import sys
+# import superFickleXAI
 from matplotlib import pyplot as plt
 import numpy as np
+import sys
 theTruth = "12345" #list(string.ascii_lowercase)
-timeArrayZ = []
-timeArrayF = []
-timeArrayT = []
-timeArrayTG = []
-timeArraySF = []
-loops = 20
 reliability = float(sys.argv[1])
+timeArrayZ = []
+timeArrayZError = []
+timeArrayF = []
+timeArrayFError = []
+timeArrayT = []
+timeArrayTError = []
+timeArrayTG = []
+timeArrayTGError = []
+loops = 25
 for k in range(loops):
-    agentReliability = 0.5+(k+1)/loops*0.5
-    print(k, agentReliability)
-    environmentReliability = reliability
+    print(k)
+    environmentReliability = 0.7+(k+1)/loops*0.3
     timeArrayAvgZ = []
     timeArrayAvgF = []
     timeArrayAvgT = []
     timeArrayAvgTG = []
     timeArrayAvgSF = []
-    subloops = 10
+    subloops = 25
     for j in range(subloops):
-        agentArrayZ = fickleXAI.genAgents(50,agentReliability)
-        agentArrayF = testerXAI.genAgents(50,agentReliability)
-        agentArrayT = lessTesterXAI.genAgents(50,agentReliability)
-        agentArrayTG = greatTesterXAI.genAgents(50,agentReliability)
-        agentArraySF = zealousTesterXAI.genAgents(50,agentReliability)
+        agentRel = reliability
+        agentArrayZ = fickleXAI.genAgents(50,agentRel)
+        agentArrayF = testerXAI.genAgents(50,agentRel)
+        agentArrayT = lessTesterXAI.genAgents(50,agentRel)
+        agentArrayTG = greatTesterXAI.genAgents(50,agentRel)
+        agentArraySF = zealousTesterXAI.genAgents(50,agentRel)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
@@ -45,7 +49,7 @@ for k in range(loops):
                 agentArrayF[i] = testerXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.5, 0.1)
                 guessAccuracyF += testerXAI.checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
                 agentArrayT[i] = lessTesterXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.5, 0.1)
-                guessAccuracyT += lessTesterXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayTG)
+                guessAccuracyT += lessTesterXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
                 agentArrayTG[i] = greatTesterXAI.agentAction(agentArrayTG[i], environmentReliability, agentArrayTG, theTruth, 0.5, 0.1)
                 guessAccuracyTG += greatTesterXAI.checkAgentGuessAccuracy(agentArrayTG[i][4],theTruth)/len(agentArrayTG)
                 agentArraySF[i] = zealousTesterXAI.agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth, 0.5, 0.1)
@@ -76,21 +80,28 @@ for k in range(loops):
                     timeArrayAvgSF.append(counter)
                 continueLooping = False
     timeArrayZ.append(sum(timeArrayAvgZ)/subloops)
+    timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
+    timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
     timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayTError.append(np.std(np.array(timeArrayAvgT)))
     timeArrayTG.append(sum(timeArrayAvgTG)/subloops)
-    timeArraySF.append(sum(timeArrayAvgSF)/subloops)
-    # for i in agentArray:
-    #     print(i)
-firstNumber = 0.5+1/loops*0.5
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayZ)
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayF)
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayT)
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayTG)
-plt.plot(np.linspace(firstNumber,1,loops),timeArraySF)
-plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester", "Zealous Tester"])
-plt.xlabel("Agent Reliability")
-plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title("Performance of Testing Behaviours against Agent Reliabilty")
-plt.savefig("agentRelTestTestER"+str(int(100*reliability))+".png")
+    timeArrayTGError.append(np.std(np.array(timeArrayAvgTG)))
+
+firstNo = 1/loops*0.3+0.7
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayZ)
+plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
+plt.plot(x,timeArrayF)
+plt.fill_between(x,np.array(timeArrayF)-np.array(timeArrayFError),np.array(timeArrayF)+np.array(timeArrayFError), alpha = 0.5)
+plt.plot(x,timeArrayT)
+plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)
+plt.plot(x,timeArrayTG)
+plt.fill_between(x,np.array(timeArrayTG)-np.array(timeArrayTGError),np.array(timeArrayTG)+np.array(timeArrayTGError), alpha = 0.5)
+
+plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester"])
+plt.xlabel("Environmental Reliability")
+plt.ylabel("Number of Iterations to Convergence")
+plt.title("Performance of Testing Behaviours against $\it{E}$")
+plt.savefig("envRelTestTestAR"+str(int(100*reliability))+".png")
 # plt.show()

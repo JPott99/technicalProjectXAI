@@ -3,7 +3,7 @@ rel2 = 0.99
 rel3 = 0.9
 
 loops = 25
-subloops = 30
+subloops = 25
 all:
 	python guessAgentRelTest.py $(rel1) $(loops) $(subloops)
 	python guessAgentRelTimeTest.py $(rel1) $(loops) $(subloops)

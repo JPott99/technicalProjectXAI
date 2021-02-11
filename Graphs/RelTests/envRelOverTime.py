@@ -10,8 +10,12 @@ import sys
 theTruth = "12345" #list(string.ascii_lowercase)
 reliability = float(sys.argv[1])
 timeArrayZ = []
+timeArrayZError = []
 timeArrayF = []
+timeArrayFError = []
+# timeArrayT = []
 timeArraySF = []
+timeArraySFError = []
 loops = 20
 for k in range(loops):
     print(k)
@@ -65,18 +69,22 @@ for k in range(loops):
                     timeArrayAvgSF.append(counter)
                 continueLooping = False
     timeArrayZ.append(sum(timeArrayAvgZ)/subloops)
+    timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
-    # timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
+    #timeArrayT.append(sum(timeArrayAvgT)/subloops)
     timeArraySF.append(sum(timeArrayAvgSF)/subloops)
+    timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
     # for i in agentArray:
     #     print(i)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayZ)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayF)
-# plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArrayT)
-plt.plot(np.linspace(1/loops*0.3+0.7,1,loops),timeArraySF)
+firstNo = 1/loops*0.3+0.7
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayZ)
+plt.plot(x,timeArrayF)
+plt.plot(x,timeArraySF)
 plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
-plt.title("Performance of Agent flexibility against Environmental Reliability")
+plt.title("Performance of Agent flexibility against $\it{E}$")
 plt.savefig("envRelFlexTestAR"+str(int(100*reliability))+".png")
 # plt.show()

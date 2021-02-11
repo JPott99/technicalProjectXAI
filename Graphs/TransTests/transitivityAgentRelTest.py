@@ -7,13 +7,15 @@ reliability = float(sys.argv[1])
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayT = []
 timeArrayC = []
-loops = 20
+timeArrayTError = []
+timeArrayCError = []
+loops = 25
 for k in range(loops):
     print(k)
     environmentReliability = reliability
     timeArrayAvgT = []
     timeArrayAvgC = []
-    subloops = 10
+    subloops = 25
     for j in range(subloops):
         agentReliability = 0.5+(k+1)/loops*0.5
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
@@ -42,15 +44,21 @@ for k in range(loops):
                     timeArrayAvgC.append(counter)
                 continueLooping = False
     timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayTError.append(np.std(np.array(timeArrayAvgT)))
     timeArrayC.append(sum(timeArrayAvgC)/subloops)
-    # for i in agentArray:
-    #     print(i)
+    timeArrayCError.append(np.std(np.array(timeArrayAvgC)))
+
+# for i in agentArray:
+#     print(i)
 firstNo = 1/loops*0.5+0.5
-plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
-plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
-plt.legend(["Transitive","No Transitivity"])
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayT)
+plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)
+plt.plot(x,timeArrayC)
+plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeArrayC)+np.array(timeArrayCError), alpha = 0.5)
+plt.legend(["Transitivity","No Transitivity"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Iterations to 75%")
-plt.title("Transitivity Performance against Agent Reliability")
+plt.title("Transitivity Performance against $\it{A}$")
 plt.savefig("agentTransTestER"+str(int(100*reliability))+".png")
 # plt.show()

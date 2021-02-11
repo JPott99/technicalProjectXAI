@@ -85,6 +85,6 @@ plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(tim
 plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
-plt.title("Performance of Agent flexibility against Environmental Reliability")
+plt.title("Performance of Agent flexibility against $\it{E}$")
 plt.savefig("envRelFlexTestAR"+str(int(100*reliability))+".png")
 # plt.show()

@@ -9,9 +9,12 @@ from matplotlib import pyplot as plt
 import numpy as np
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayZ = []
+timeArrayZError = []
 timeArrayF = []
+timeArrayFError = []
 # timeArrayT = []
 timeArraySF = []
+timeArraySFError = []
 loops = 20
 reliability = float(sys.argv[1])
 for k in range(loops):
@@ -66,19 +69,26 @@ for k in range(loops):
                     timeArrayAvgSF.append(counter)
                 continueLooping = False
     timeArrayZ.append(sum(timeArrayAvgZ)/subloops)
+    timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
+    timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
     #timeArrayT.append(sum(timeArrayAvgT)/subloops)
     timeArraySF.append(sum(timeArrayAvgSF)/subloops)
+    timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
     # for i in agentArray:
     #     print(i)
-firstNumber = 0.5+1/loops*0.5
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayZ)
-plt.plot(np.linspace(firstNumber,1,loops),timeArrayF)
+firstNo = 1/loops*0.5+0.5
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayZ)
+plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
+plt.plot(x,timeArrayF)
+plt.fill_between(x,np.array(timeArrayF)-np.array(timeArrayFError),np.array(timeArrayF)+np.array(timeArrayFError), alpha = 0.5)
 #plt.plot(np.linspace(firstNumber,1,loops),timeArrayT)
-plt.plot(np.linspace(firstNumber,1,loops),timeArraySF)
+plt.plot(x,timeArraySF)
+plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(timeArraySF)+np.array(timeArraySFError), alpha = 0.5)
 plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title("Performance of Agent flexibility against Agent Reliabilty")
+plt.title("Performance of Agent Flexibility against $\it{A}$")
 plt.savefig("agentRelFlexTestER"+str(int(100*reliability))+".png")
 # plt.show()

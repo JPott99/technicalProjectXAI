@@ -58,6 +58,6 @@ plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeA
 plt.legend(["Independent","Dependent"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Iterations to 75%")
-plt.title("Guess Dependence Performance against Agent Reliability")
+plt.title("Guess Dependence Performance against $\it{A}$")
 plt.savefig("agentGuessTestER"+str(int(100*reliability))+".png")
 # plt.show()

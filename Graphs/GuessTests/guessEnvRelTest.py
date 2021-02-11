@@ -58,6 +58,6 @@ plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeA
 plt.legend(["Independent","Dependent"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Iterations to 75%")
-plt.title("Guess Dependence Performance against Environmental Reliability")
+plt.title("Guess Dependence Performance against $\it{E}$")
 plt.savefig("envGuessTestAR"+str(int(100*reliability))+".png")
 # plt.show()

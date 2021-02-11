@@ -67,7 +67,7 @@ for k in range(loops):
 
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.3+0.7
+firstNo = 1/loops*0.5+0.5
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayT)
 plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)
@@ -76,6 +76,6 @@ plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeA
 plt.legend(["Independent","Dependent"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Time to 75% (s)")
-plt.title("Guess Dependence Performance against Environmental Reliability")
+plt.title("Guess Dependence Performance against $\it{E}$")
 plt.savefig("envGuessTimeTestAR"+str(int(100*reliability))+".png")
 # plt.show()
