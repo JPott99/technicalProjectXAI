@@ -13,7 +13,7 @@ timeArrayFError = []
 # timeArrayT = []
 timeArraySF = []
 timeArraySFError = []
-loops = 25
+loops = int(sys.argv[2])
 for k in range(loops):
     print(k)
     environmentReliability = 0.7+(k+1)/loops*0.3
@@ -21,7 +21,7 @@ for k in range(loops):
     timeArrayAvgF = []
     # timeArrayAvgT = []
     timeArrayAvgSF = []
-    subloops = 25
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentRel = reliability
         agentArrayZ = zealousXAI.genAgents(50,agentRel)
@@ -86,5 +86,5 @@ plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Agent flexibility against $\it{E}$")
-plt.savefig("envRelFlexTestAR"+str(int(100*reliability))+".png")
+plt.savefig("Graphs/FlexTests/envRelFlexTestAR"+str(int(100*reliability))+".png")
 # plt.show()

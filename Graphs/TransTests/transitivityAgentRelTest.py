@@ -9,13 +9,13 @@ timeArrayT = []
 timeArrayC = []
 timeArrayTError = []
 timeArrayCError = []
-loops = 25
+loops = int(sys.argv[2])
 for k in range(loops):
     print(k)
     environmentReliability = reliability
     timeArrayAvgT = []
     timeArrayAvgC = []
-    subloops = 25
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentReliability = 0.5+(k+1)/loops*0.5
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
@@ -60,5 +60,5 @@ plt.legend(["Transitivity","No Transitivity"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Iterations to 75%")
 plt.title("Transitivity Performance against $\it{A}$")
-plt.savefig("agentTransTestER"+str(int(100*reliability))+".png")
+plt.savefig("Graphs/TransTests/agentTransTestER"+str(int(100*reliability))+".png")
 # plt.show()

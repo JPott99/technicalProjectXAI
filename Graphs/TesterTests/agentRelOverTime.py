@@ -16,7 +16,7 @@ timeArrayT = []
 timeArrayTError = []
 timeArrayTG = []
 timeArrayTGError = []
-loops = 25
+loops = int(sys.argv[2])
 reliability = float(sys.argv[1])
 for k in range(loops):
     agentReliability = 0.5+(k+1)/loops*0.5
@@ -26,7 +26,7 @@ for k in range(loops):
     timeArrayAvgF = []
     timeArrayAvgT = []
     timeArrayAvgTG = []
-    subloops = 25
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentArrayZ = fickleXAI.genAgents(50,agentReliability)
         agentArrayF = testerXAI.genAgents(50,agentReliability)
@@ -93,5 +93,5 @@ plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
 plt.title("Performance of Testing Behaviours against $\it{A}$")
-plt.savefig("agentRelTestTestER"+str(int(100*reliability))+".png")
+plt.savefig("Graphs/TesterTests/agentRelTestTestER"+str(int(100*reliability))+".png")
 # plt.show()

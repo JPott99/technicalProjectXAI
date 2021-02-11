@@ -18,7 +18,7 @@ timeArrayT = []
 timeArrayTError = []
 timeArrayTG = []
 timeArrayTGError = []
-loops = 25
+loops = int(sys.argv[2])
 for k in range(loops):
     print(k)
     environmentReliability = 0.7+(k+1)/loops*0.3
@@ -27,7 +27,7 @@ for k in range(loops):
     timeArrayAvgT = []
     timeArrayAvgTG = []
     timeArrayAvgSF = []
-    subloops = 25
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentRel = reliability
         agentArrayZ = fickleXAI.genAgents(50,agentRel)
@@ -103,5 +103,5 @@ plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Testing Behaviours against $\it{E}$")
-plt.savefig("envRelTestTestAR"+str(int(100*reliability))+".png")
+plt.savefig("Graphs/TesterTests/envRelTestTestAR"+str(int(100*reliability))+".png")
 # plt.show()

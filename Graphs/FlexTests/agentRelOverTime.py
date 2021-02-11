@@ -15,7 +15,7 @@ timeArrayFError = []
 # timeArrayT = []
 timeArraySF = []
 timeArraySFError = []
-loops = 25
+loops = int(sys.argv[2])
 reliability = float(sys.argv[1])
 for k in range(loops):
     agentReliability = 0.5+(k+1)/loops*0.5
@@ -25,7 +25,7 @@ for k in range(loops):
     timeArrayAvgF = []
     # timeArrayAvgT = []
     timeArrayAvgSF = []
-    subloops = 25
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentArrayZ = zealousXAI.genAgents(50,agentReliability)
         agentArrayF = fickleXAI.genAgents(50,agentReliability)
@@ -114,5 +114,5 @@ plt.legend(["Zealous","Flexible", "Fickle"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
 plt.title("Performance of Agent flexibility against $\it{A}$")
-plt.savefig("agentRelFlexTestER"+str(int(100*reliability))+".png")
+plt.savefig("Graphs/FlexTests/agentRelFlexTestER"+str(int(100*reliability))+".png")
 # plt.show()
