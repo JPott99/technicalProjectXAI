@@ -10,14 +10,18 @@ timeArrayT = []
 timeArrayC = []
 timeTimeT = []
 timeTimeC = []
-loops = 20
+timeArrayT = []
+timeArrayTError = []
+timeArrayC = []
+timeArrayCError = []
+loops = int(sys.argv[2])
 for k in range(loops):
     environmentReliability =  0.7+(k+1)/loops*0.3
     timeArrayAvgT = []
     timeArrayAvgC = []
     timeTimeAvgT = []
     timeTimeAvgC = []
-    subloops = 10
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         startTime = time.time()
         agentReliability = reliability
@@ -41,28 +45,34 @@ for k in range(loops):
                 timeC += time.time() - startTime
             counter+=1
             if guessAccuracyT>0.75 and len(timeArrayAvgT)==j:
-                timeArrayAvgT.append(counter)
+                timeArrayAvgT.append(timeT)
                 timeTimeAvgT.append(timeT)
             if guessAccuracyC>0.75 and len(timeArrayAvgC)==j:
-                timeArrayAvgC.append(counter)
+                timeArrayAvgC.append(timeC)
                 timeTimeAvgC.append(timeC)
             if len(timeArrayAvgT+timeArrayAvgC) == 2*(j+1):
                 continueLooping = False
             if counter >1000:
                 if len(timeArrayAvgT)==j:
-                    timeArrayAvgT.append(counter)
+                    timeArrayAvgT.append(timeT)
                     timeTimeAvgT.append(timeT)
                 if len(timeArrayAvgC)==j:
-                    timeArrayAvgC.append(counter)
+                    timeArrayAvgC.append(timeC)
                     timeTimeAvgC.append(timeC)
                 continueLooping = False
-    timeArrayT.append(sum(timeTimeAvgT)/subloops)
-    timeArrayC.append(sum(timeTimeAvgC)/subloops)
+    timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayTError.append(np.std(np.array(timeArrayAvgT)))
+    timeArrayC.append(sum(timeArrayAvgC)/subloops)
+    timeArrayCError.append(np.std(np.array(timeArrayAvgC)))
+
     # for i in agentArray:
     #     print(i)
 firstNo = 1/loops*0.3+0.7
-plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
-plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayT)
+plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)
+plt.plot(x,timeArrayC)
+plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeArrayC)+np.array(timeArrayCError), alpha = 0.5)
 plt.legend(["Independent","Dependent"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Time to 75% (s)")

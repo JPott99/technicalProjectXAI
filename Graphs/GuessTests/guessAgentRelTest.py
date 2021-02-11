@@ -6,13 +6,15 @@ import sys
 reliability = float(sys.argv[1])
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArrayT = []
+timeArrayTError = []
 timeArrayC = []
-loops = 20
+timeArrayCError = []
+loops = int(sys.argv[2])
 for k in range(loops):
     environmentReliability = reliability
     timeArrayAvgT = []
     timeArrayAvgC = []
-    subloops = 10
+    subloops = int(sys.argv[3])
     for j in range(subloops):
         agentReliability = 0.5+(k+1)/loops*0.5
         agentArrayT = independentGuessXAI.genAgents(50,agentReliability)
@@ -41,12 +43,18 @@ for k in range(loops):
                     timeArrayAvgC.append(counter)
                 continueLooping = False
     timeArrayT.append(sum(timeArrayAvgT)/subloops)
+    timeArrayTError.append(np.std(np.array(timeArrayAvgT)))
     timeArrayC.append(sum(timeArrayAvgC)/subloops)
+    timeArrayCError.append(np.std(np.array(timeArrayAvgC)))
+
     # for i in agentArray:
     #     print(i)
 firstNo = 1/loops*0.5+0.5
-plt.plot(np.linspace(firstNo,1,loops),timeArrayT)
-plt.plot(np.linspace(firstNo,1,loops),timeArrayC)
+x = np.linspace(firstNo,1,loops)
+plt.plot(x,timeArrayT)
+plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)
+plt.plot(x,timeArrayC)
+plt.fill_between(x,np.array(timeArrayC)-np.array(timeArrayCError),np.array(timeArrayC)+np.array(timeArrayCError), alpha = 0.5)
 plt.legend(["Independent","Dependent"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Iterations to 75%")
