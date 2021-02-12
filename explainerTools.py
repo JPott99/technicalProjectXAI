@@ -1,6 +1,7 @@
 import csv
 import frameworkXAI
 import math
+import matplotlib.pyplot as plt
 
 def exportSim(agentArray, fileName = 'exportedAgentArray.csv'):
     with open(fileName, mode='w', newline = '') as exporter:
@@ -141,6 +142,54 @@ def explainHypothesis(agentArray,agentID, hypothesisID):
         evidenceList.append(evidenceString)
     print("Agent", agentID, "thinks", currentHypothesis[0],"is in position",currentHypothesis[2],"with beleif",currentHypothesis[3], "becuase", str(evidenceList)+".")
 
+
+def makeHypothesisGraph(agentArray, agentID, elementID, dir = "", title = ""):
+    currentHypotheses = agentArray[agentID][3]
+    values = []
+    for i in currentHypotheses:
+        if elementID in i:
+            values.append(i[3])
+    x = list(range(1,len(values)+1))
+    plt.figure()
+    plt.bar(x, values)
+    plt.xlabel('Position')
+    plt.ylabel('Belief')
+    plt.title('Distribution in Agent '+ str(agentID) + '\'s belief in Element '+ elementID+'\'s position.')
+    plt.savefig(dir+"beleifDistAgent"+str(agentID)+"El"+elementID+title+".png")
+
+def makeSystemHypothesisGraph(agentArray,elementID, dir = "", title = ""):
+    agentCount = len(agentArray)
+    values = []
+    for i in agentArray:
+        currentHypotheses = i[3]
+        for k in currentHypotheses:
+            if elementID in k:
+                if len(values)<=k[2]:
+                    values.append(0)
+                values[k[2]]+=k[3]/agentCount
+    x = list(range(1,len(values)+1))
+    plt.figure()
+    plt.bar(x, values)
+    plt.xlabel('Position')
+    plt.ylabel('Belief')
+    plt.title('Distribution of System\'s belief in Element '+ elementID+'\'s position.')
+    plt.savefig(dir+"beleifDistSystemEl"+elementID+title+".png")
+
+def knowledgeChainGraph(agentArray,agentID, dir="", title=""):
+    currentKnowledge = agentArray[agentID][2]
+    values = [0]
+    for i in currentKnowledge:
+        lenChain = len(i[4])
+        while len(values) <= lenChain-2:
+            values.append(0)
+        values[lenChain-2]+=1
+    x = list(range(1,len(values)+1))
+    plt.figure()
+    plt.bar(x, values)
+    plt.xlabel('Degrees Of Seperation from Knowledge Source')
+    plt.ylabel('Count')
+    plt.title('Distribution of Agent '+ str(agentID) + '\'s knowledge degree.')
+    plt.savefig(dir+"knowledgeDegreeAgent"+str(agentID)+title+".png")
 # Testing code for import export functions.
 # theTruth = "12345" #list(string.ascii_lowercase)
 # environmentReliability = 0.99
@@ -157,9 +206,17 @@ def explainHypothesis(agentArray,agentID, hypothesisID):
 # print(agentArray[0][:-1])
 # exportSim(agentArray)
 # agentArrayI = importSim("exportedAgentArray.csv")
-agentArray = importSim("exportedAgentArray.csv")
-print(agentArray[0])
-showFacts(agentArray,0,["1"])
-explainFact(agentArray,0,0)
-showHypotheses(agentArray,0)
-explainHypothesis(agentArray,0,0)
+# agentArray = importSim("exportedAgentArray.csv")
+theTruth = "12345"
+agentArray = frameworkXAI.genAgents(50,0.99)
+for k in range(25):
+    for i in range(len(agentArray)):
+        agentArray[i] = frameworkXAI.agentAction(agentArray[i], 0.99, agentArray, theTruth, 0.5, 0.1)
+# makeHypothesisGraph(agentArray,0,'1',"Graphs/Explainer/", "25Iter")
+# makeSystemHypothesisGraph(agentArray,'1',"Graphs/Explainer/", "25Iter")
+knowledgeChainGraph(agentArray,0,"Graphs/Explainer/", "25Iter")
+# print(agentArray[0])
+# showFacts(agentArray,0,["1"])
+# explainFact(agentArray,0,0)
+# showHypotheses(agentArray,0)
+# explainHypothesis(agentArray,0,0)
