@@ -2,9 +2,8 @@ rel1 = 1
 rel2 = 0.99
 rel3 = 0.9
 
-loops = 1
-subloops = 1
-
+loops = 15
+subloops = 15
 all:
 	python Graphs/FlexTests/agentRelOverTime.py 1 $(loops) $(subloops)
 	python Graphs/FlexTests/agentRelOverTime.py 0.99 $(loops) $(subloops)
