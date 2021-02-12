@@ -190,6 +190,24 @@ def knowledgeChainGraph(agentArray,agentID, dir="", title=""):
     plt.ylabel('Count')
     plt.title('Distribution of Agent '+ str(agentID) + '\'s knowledge degree.')
     plt.savefig(dir+"knowledgeDegreeAgent"+str(agentID)+title+".png")
+
+def knowledgeChainSystemGraph(agentArray, dir="", title=""):
+    values = [0]
+    for agentID in range(len(agentArray)):
+        currentKnowledge = agentArray[agentID][2]
+        for i in currentKnowledge:
+            lenChain = len(i[4])
+            while len(values) <= lenChain-2:
+                values.append(0)
+            values[lenChain-2]+=1
+    x = list(range(1,len(values)+1))
+    plt.figure()
+    plt.bar(x, values)
+    plt.xlabel('Degrees Of Seperation from Knowledge Source')
+    plt.ylabel('Count')
+    plt.title('Distribution of System\'s knowledge degree.')
+    plt.savefig(dir+"knowledgeDegreeSystem"+title+".png")
+
 # Testing code for import export functions.
 # theTruth = "12345" #list(string.ascii_lowercase)
 # environmentReliability = 0.99
@@ -209,12 +227,13 @@ def knowledgeChainGraph(agentArray,agentID, dir="", title=""):
 # agentArray = importSim("exportedAgentArray.csv")
 theTruth = "12345"
 agentArray = frameworkXAI.genAgents(50,0.99)
-for k in range(25):
+loops = 100
+for k in range(loops):
     for i in range(len(agentArray)):
         agentArray[i] = frameworkXAI.agentAction(agentArray[i], 0.99, agentArray, theTruth, 0.5, 0.1)
 # makeHypothesisGraph(agentArray,0,'1',"Graphs/Explainer/", "25Iter")
 # makeSystemHypothesisGraph(agentArray,'1',"Graphs/Explainer/", "25Iter")
-knowledgeChainGraph(agentArray,0,"Graphs/Explainer/", "25Iter")
+knowledgeChainSystemGraph(agentArray,"Graphs/Explainer/", "Iter"+str(loops))
 # print(agentArray[0])
 # showFacts(agentArray,0,["1"])
 # explainFact(agentArray,0,0)
