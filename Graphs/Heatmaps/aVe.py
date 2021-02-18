@@ -7,9 +7,9 @@ folderName = ""#sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArray = []
-loops0 = 2
+loops0 = 10
 for k in range(loops0+1):
-    loops1=2
+    loops1=10
     innerArray = []
     for l in range(loops1+1):
         timeArrayAvg = []
@@ -42,5 +42,5 @@ plt.colorbar()
 plt.ylabel("Agent Reliability")
 plt.xlabel("Environment Reliability")
 plt.title("Heatmap comparing Environment and Agent Reliability.")
-plt.savefig(folderName+"/heatMapAgentRelVEnvRel.png")
+plt.savefig(folderName+"aVe_Heatmap.png")
 #plt.show()
