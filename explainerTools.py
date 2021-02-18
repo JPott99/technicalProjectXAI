@@ -208,6 +208,59 @@ def knowledgeChainSystemGraph(agentArray, dir="", title=""):
     plt.title('Distribution of System\'s knowledge degree.')
     plt.savefig(dir+"knowledgeDegreeSystem"+title+".png")
 
+def guessAccuracyGraph(agentArray, guessFunction, theTruth,dir="", title=""):
+    values = []
+    for i in agentArray:
+        currentGuess = i[4]
+        guessAcc = guessFunction(currentGuess, theTruth)
+        values.append(guessAcc)
+    x = list(range(1,len(values)+1))
+    plt.figure()
+    plt.bar(x, values)
+    plt.xlabel('Agent')
+    plt.ylabel('Guess Accuracy')
+    plt.title('Guess Accuracy of Each Agent in System.')
+    plt.savefig(dir+"allAgentGuessAcc"+title+".png")
+
+def findMaxChainLength(agentArray):
+    for agentID in range(len(agentArray)):
+        currentKnowledge = agentArray[agentID][2]
+        maxChain = 0
+        for i in currentKnowledge:
+            lenChain = len(i[4])-1
+            if lenChain > maxChain:
+                maxChain = lenChain
+    return maxChain
+
+def graphMaxChainLen(maxChainA,dir="", title=""):
+    plt.figure()
+    plt.plot(maxChainA)
+    plt.xlabel('Iterations')
+    plt.ylabel('Maximum Chain Length')
+    plt.title('Maximum Chain Length over Time')
+    plt.savefig(dir+"maxChainGraph"+title+".png")
+
+def findAvgChainLength(agentArray):
+    for agentID in range(len(agentArray)):
+        currentKnowledge = agentArray[agentID][2]
+        avgChain = []
+        for i in currentKnowledge:
+            lenChain = len(i[4])-1
+            avgChain.append(lenChain)
+    if len(avgChain)>0:
+        avgChainFin = sum(avgChain)/len(avgChain)
+    else:
+        avgChainFin = 0
+    return avgChainFin
+
+def graphAvgChainLen(avgChainA,dir="", title=""):
+    plt.figure()
+    plt.plot(avgChainA)
+    plt.xlabel('Iterations')
+    plt.ylabel('Average Chain Length')
+    plt.title('Average Chain Length over Time')
+    plt.savefig(dir+"avgChainGraph"+title+".png")
+
 # Testing code for import export functions.
 # theTruth = "12345" #list(string.ascii_lowercase)
 # environmentReliability = 0.99
@@ -227,13 +280,20 @@ def knowledgeChainSystemGraph(agentArray, dir="", title=""):
 # agentArray = importSim("exportedAgentArray.csv")
 theTruth = "12345"
 agentArray = frameworkXAI.genAgents(50,0.99)
-loops = 100
+loops = 300
+avgChainA = []
+maxChainA = []
 for k in range(loops):
     for i in range(len(agentArray)):
         agentArray[i] = frameworkXAI.agentAction(agentArray[i], 0.99, agentArray, theTruth, 0.5, 0.1)
+    avgChainA.append(findAvgChainLength(agentArray))
+    maxChainA.append(findMaxChainLength(agentArray))
+graphAvgChainLen(avgChainA,"Graphs/Explainer/", "testChance10")
+graphMaxChainLen(maxChainA,"Graphs/Explainer/", "testChance10")
 # makeHypothesisGraph(agentArray,0,'1',"Graphs/Explainer/", "25Iter")
 # makeSystemHypothesisGraph(agentArray,'1',"Graphs/Explainer/", "25Iter")
-knowledgeChainSystemGraph(agentArray,"Graphs/Explainer/", "Iter"+str(loops))
+# knowledgeChainSystemGraph(agentArray,"Graphs/Explainer/", "Iter"+str(loops))
+guessAccuracyGraph(agentArray,frameworkXAI.checkAgentGuessAccuracy, theTruth,"Graphs/Explainer/", "Iter"+str(loops))
 # print(agentArray[0])
 # showFacts(agentArray,0,["1"])
 # explainFact(agentArray,0,0)
