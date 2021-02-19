@@ -5,6 +5,10 @@ import sys
 
 folderName = ""#sys.argv[1]
 
+startPint = 0.15
+stepPint = 0.3
+
+
 theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 0.99
 timeArray = []
@@ -23,7 +27,7 @@ for k in range(loops0):
             while continueLooping == True:
                 guessAccuracy = 0
                 for i in range(len(agentArray)):
-                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.25+k*0.2/loops0, 0.25+l*0.2/loops1)
+                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, startPint+(1+k)*stepPint/loops0, startPint+(1+l)*stepPint/loops1)
                     guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
                 guessAccuracies.append(guessAccuracy)
                 counter+=1
@@ -37,10 +41,10 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.25,0.45,0.25,0.45],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[startPint,startPint+stepPint,startPint,startPint+stepPint],aspect='auto')
 plt.colorbar()
-plt.ylabel("Chance to Ask Agent")
-plt.xlabel("Chance to Ask Environment")
-plt.title("Heatmap comparing Chat Chance and Environment chance.")
+plt.ylabel("Agent Sharing Rate")
+plt.xlabel("Environment Sharing Rate")
+plt.title("Heatmap comparing Agent and Environment sharing rates.")
 plt.savefig(folderName+"heatMapChatVTestEMZI.png")
 #plt.show()

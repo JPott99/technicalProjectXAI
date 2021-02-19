@@ -90,14 +90,8 @@ def checkKnowledge(agentKnowledge, newKnowledge, agentID):
     newKnowledge = newKnowledge[:]
     for i in agentKnowledge:
         if i[0] == newKnowledge[0] and i[2] == newKnowledge[2]:
-            i[3] = newKnowledge[3]
-            i[4] = newKnowledge[4][:]+[agentID]
             return agentKnowledge
         if i[2] == newKnowledge[0] and i[0] == newKnowledge[2]:
-            i[0] = newKnowledge[0]
-            i[2] = newKnowledge[2]
-            i[3] = newKnowledge[3]
-            i[4] = newKnowledge[4][:]+[agentID]
             return agentKnowledge
     newKnowledge[4] = newKnowledge[4][:]+[agentID]
     agentKnowledge.append(newKnowledge)

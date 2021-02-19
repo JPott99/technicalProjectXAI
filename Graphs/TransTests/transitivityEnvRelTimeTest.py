@@ -35,11 +35,11 @@ for k in range(loops):
             guessAccuracyC = 0
             for i in range(len(agentArrayT)):
                 startTime = time.time()
-                agentArrayT[i] = transitiveXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.38, 0.35)
+                agentArrayT[i] = transitiveXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.35, 0.35)
                 guessAccuracyT += transitiveXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
                 timeT += time.time() - startTime
                 startTime = time.time()
-                agentArrayC[i] = transitiveCXAI.agentAction(agentArrayC[i], environmentReliability, agentArrayC, theTruth, 0.38, 0.35)
+                agentArrayC[i] = transitiveCXAI.agentAction(agentArrayC[i], environmentReliability, agentArrayC, theTruth, 0.35, 0.35)
                 guessAccuracyC += transitiveCXAI.checkAgentGuessAccuracy(agentArrayC[i][4],theTruth)/len(agentArrayC)
                 timeC += time.time() - startTime
             counter+=1
@@ -66,7 +66,7 @@ for k in range(loops):
 
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.5+0.5
+firstNo = 1/loops*0.3+0.7
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayT)
 plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)

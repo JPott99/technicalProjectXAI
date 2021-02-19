@@ -1,5 +1,6 @@
 import zealousXAI
 import fickleXAI
+import fundamentalistXAI
 import superFickleXAI
 from matplotlib import pyplot as plt
 import numpy as np
@@ -10,6 +11,8 @@ timeArrayZ = []
 timeArrayZError = []
 timeArrayF = []
 timeArrayFError = []
+timeArrayFu = []
+timeArrayFuError = []
 # timeArrayT = []
 timeArraySF = []
 timeArraySFError = []
@@ -18,6 +21,7 @@ for k in range(loops):
     environmentReliability = 0.7+(k+1)/loops*0.3
     timeArrayAvgZ = []
     timeArrayAvgF = []
+    timeArrayAvgFu = []
     # timeArrayAvgT = []
     timeArrayAvgSF = []
     subloops = int(sys.argv[3])
@@ -25,40 +29,47 @@ for k in range(loops):
         agentRel = reliability
         agentArrayZ = zealousXAI.genAgents(50,agentRel)
         agentArrayF = fickleXAI.genAgents(50,agentRel)
-        # agentArrayT = testerXAI.genAgents(50,0.9)
+        agentArrayFu = fundamentalistXAI.genAgents(50,0.9)
         agentArraySF = superFickleXAI.genAgents(50,agentRel)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
             guessAccuracyZ = 0
             guessAccuracyF = 0
+            guessAccuracyFu = 0
             # guessAccuracyT = 0
             guessAccuracySF = 0
             for i in range(len(agentArrayZ)):
-                agentArrayZ[i] = zealousXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth, 0.38, 0.35)
+                agentArrayZ[i] = zealousXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth, 0.35, 0.35)
                 guessAccuracyZ += zealousXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
-                agentArrayF[i] = fickleXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.38, 0.35)
+                agentArrayF[i] = fickleXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.35, 0.35)
                 guessAccuracyF += fickleXAI.checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
+                agentArrayFu[i] = fundamentalistXAI.agentAction(agentArrayFu[i], environmentReliability, agentArrayFu, theTruth, 0.35, 0.35)
+                guessAccuracyFu += fundamentalistXAI.checkAgentGuessAccuracy(agentArrayFu[i][4],theTruth)/len(agentArrayFu)
                 # agentArrayT[i] = testerXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.5, 0.1)
                 # guessAccuracyT += testerXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
-                agentArraySF[i] = superFickleXAI.agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth, 0.38, 0.35)
+                agentArraySF[i] = superFickleXAI.agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth, 0.35, 0.35)
                 guessAccuracySF += superFickleXAI.checkAgentGuessAccuracy(agentArraySF[i][4],theTruth)/len(agentArraySF)
             counter+=1
             if guessAccuracyZ>0.75 and len(timeArrayAvgZ)==j:
                 timeArrayAvgZ.append(counter)
             if guessAccuracyF>0.75 and len(timeArrayAvgF)==j:
                 timeArrayAvgF.append(counter)
+            if guessAccuracyFu>0.75 and len(timeArrayAvgFu)==j:
+                timeArrayAvgFu.append(counter)
             # if guessAccuracyT>0.75 and len(timeArrayAvgT)==j:
             # timeArrayAvgT.append(counter)
             if guessAccuracySF>0.75 and len(timeArrayAvgSF)==j:
                 timeArrayAvgSF.append(counter)
-            if len(timeArrayAvgZ+timeArrayAvgF+timeArrayAvgSF) == 3*(j+1):
+            if len(timeArrayAvgZ+timeArrayAvgF+timeArrayAvgFu+timeArrayAvgSF) == 4*(j+1):
                 continueLooping = False
             if counter >1000:
                 if len(timeArrayAvgZ)==j:
                     timeArrayAvgZ.append(counter)
                 if len(timeArrayAvgF)==j:
                     timeArrayAvgF.append(counter)
+                if len(timeArrayAvgFu)==j:
+                    timeArrayAvgFu.append(counter)
                 # if len(timeArrayAvgT)==j:
                     # timeArrayAvgT.append(counter)
                 if len(timeArrayAvgSF)==j:
@@ -68,6 +79,8 @@ for k in range(loops):
     timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
     timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
+    timeArrayFu.append(sum(timeArrayAvgFu)/subloops)
+    timeArrayFuError.append(np.std(np.array(timeArrayAvgFu)))
     #timeArrayT.append(sum(timeArrayAvgT)/subloops)
     timeArraySF.append(sum(timeArrayAvgSF)/subloops)
     timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
@@ -79,9 +92,11 @@ plt.plot(x,timeArrayZ)
 plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
 plt.plot(x,timeArrayF)
 plt.fill_between(x,np.array(timeArrayF)-np.array(timeArrayFError),np.array(timeArrayF)+np.array(timeArrayFError), alpha = 0.5)
-plt.plot(x,timeArrayF)
+plt.plot(x,timeArrayFu)
+plt.fill_between(x,np.array(timeArrayFu)-np.array(timeArrayFuError),np.array(timeArrayFu)+np.array(timeArrayFuError), alpha = 0.5)
+plt.plot(x,timeArraySF)
 plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(timeArraySF)+np.array(timeArraySFError), alpha = 0.5)
-plt.legend(["Zealous","Flexible", "Fickle"])
+plt.legend(["Zealous","Flexible","Fundamentalist", "Fickle"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Agent flexibility against $\it{E}$")
