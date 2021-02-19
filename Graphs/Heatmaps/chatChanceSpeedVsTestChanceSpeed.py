@@ -1,33 +1,33 @@
-from frameworkXAI import *
+from fickleXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
 import sys
 
-folderName = sys.argv[1]
+folderName = ""#sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 0.99
 timeArray = []
-loops0 = 50
+loops0 = 25
 for k in range(loops0):
-    loops1=50
+    loops1=25
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
         subloops = 10
         for j in range(subloops):
-            agentArray = genAgents(50,1)
+            agentArray = genAgents(50,0.99)
             counter  = 0
             continueLooping = True
             guessAccuracies = []
             while continueLooping == True:
                 guessAccuracy = 0
                 for i in range(len(agentArray)):
-                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, k*0.49/loops0, (l+1)*0.49/loops1)
+                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, 0.25+k*0.2/loops0, 0.25+l*0.2/loops1)
                     guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
                 guessAccuracies.append(guessAccuracy)
                 counter+=1
-                if guessAccuracy>0.7:
+                if guessAccuracy>0.75:
                     continueLooping = False
                     timeArrayAvg.append(counter)
                 if counter >1000:
@@ -37,10 +37,10 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[(0+1)*0.49/loops1,0.49,0,0.49],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.25,0.45,0.25,0.45],aspect='auto')
 plt.colorbar()
-plt.ylabel("Chance to Ask another Agent")
+plt.ylabel("Chance to Ask Agent")
 plt.xlabel("Chance to Ask Environment")
 plt.title("Heatmap comparing Chat Chance and Environment chance.")
-plt.savefig("Graphs/"+folderName+"/heatMapChatVTest.png")
+plt.savefig(folderName+"heatMapChatVTestEMZI.png")
 #plt.show()
