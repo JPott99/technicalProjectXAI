@@ -29,7 +29,7 @@ for k in range(loops):
         agentRel = reliability
         agentArrayZ = zealousXAI.genAgents(50,agentRel)
         agentArrayF = fickleXAI.genAgents(50,agentRel)
-        agentArrayFu = fundamentalistXAI.genAgents(50,0.9)
+        agentArrayFu = fundamentalistXAI.genAgents(50,agentRel)
         agentArraySF = superFickleXAI.genAgents(50,agentRel)
         counter  = 0
         continueLooping = True

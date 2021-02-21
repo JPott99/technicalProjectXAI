@@ -22,7 +22,7 @@ for k in range(loops):
     timeTimeAvgC = []
     subloops = int(sys.argv[3])
     for j in range(subloops):
-        agentReliability = 0.5+(k+1)/loops*0.5
+        agentReliability = 0.5+(k+0)/loops*0.5
         agentArrayT = transitiveXAI.genAgents(50,agentReliability)
         agentArrayC = transitiveCXAI.genAgents(50,agentReliability)
         timeT = 0

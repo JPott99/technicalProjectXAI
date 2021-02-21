@@ -105,7 +105,7 @@ for k in range(loops):
     timeArrayF.append(sum(timeArrayAvgF)/subloops)
     timeArrayFError.append(np.std(np.array(timeArrayAvgF)))
     timeArrayFu.append(sum(timeArrayAvgFu)/subloops)
-    timeArrayFError.append(np.std(np.array(timeArrayAvgFu)))
+    timeArrayFuError.append(np.std(np.array(timeArrayAvgFu)))
     #timeArrayT.append(sum(timeArrayAvgT)/subloops)
     timeArraySF.append(sum(timeArrayAvgSF)/subloops)
     timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
