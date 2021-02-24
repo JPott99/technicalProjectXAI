@@ -28,7 +28,7 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha, b
     # knowledge is a list of where knowledge has come from, in this case
     # originating from "E", the environment, and passed to agentID.
     whichTest = random.uniform(0,1)
-    if whichTest < beta or len(agentProfile[2]) < 4:
+    if whichTest < 1-beta or len(agentProfile[2]) < 4:
         firstLetter = random.randint(0,len(theTruth)-1)
         otherLetter = firstLetter
         while otherLetter == firstLetter:
