@@ -43,6 +43,6 @@ plt.fill_between(x,np.array(timeArray)-np.array(timeArrayError),np.array(timeArr
 # plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
 plt.xlabel("Testing Rate")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title("Performance of Testing Behaviours against $\it{A}$")
+plt.title("Performance against testing rate.")
 plt.savefig("TestingRate.png")
 # plt.show()
