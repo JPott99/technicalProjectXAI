@@ -29,6 +29,7 @@ all:
 	python Graphs/TesterTests/envRelOverTime.py 1 $(loops) $(subloops)
 	python Graphs/TesterTests/envRelOverTime.py 0.99 $(loops) $(subloops)
 	python Graphs/TesterTests/envRelOverTime.py 0.9 $(loops) $(subloops)
+	python Graphs/TesterTests/testRateBeta.py 0 $(loops) $(subloops)
 	python Graphs/TransTests/transitivityAgentRelTest.py $(rel1) $(loops) $(subloops)
 	python Graphs/TransTests/transitivityAgentRelTimeTest.py $(rel1) $(loops) $(subloops)
 	python Graphs/TransTests/transitivityEnvRelTest.py $(rel1) $(loops) $(subloops)

@@ -226,10 +226,10 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth,alpha
     # their existing knowledge
     whatToDo = random.uniform(0,1)
     if whatToDo < chatChance:
-        agentProfile = meetAgent(agentProfile, agentArray,alpha,beta)
+        agentProfile = meetAgent(agentProfile, agentArray,alpha)
         agentProfile[5] = "meet"
     elif whatToDo > 1-testChance:
-        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha)
+        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha,beta)
         agentProfile[5] = "test"
     else:
         if agentProfile[5] != "thought":
