@@ -5,14 +5,14 @@ import numpy as np
 theTruth = "12345" #list(string.ascii_lowercase)
 timeArray = []
 timeArrayError = []
-loops = int(sys.argv[2])
+loops = 100
 # input = float(sys.argv[1])
 for k in range(loops):
     agentReliability = 0.99
     # print(k, agentReliability)
     environmentReliability = 0.99
     timeArrayAvg = []
-    subloops = int(sys.argv[3])
+    subloops = 100
     for j in range(subloops):
         agentArray = testerXAI.genAgents(50,agentReliability)
         counter  = 0
