@@ -17,7 +17,7 @@ def genAgents(numOfAgents, agentReliability):
         agentArray.append(agentProfile)
     return agentArray
 
-def environmentKnowledge(agentProfile, environmentReliability, theTruth):
+def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha):
     # Function that gives a given agent knowledge of a given reliability.
     # The knowledge is a statement comparing the positions of 2 letters of the
     # alphabet, known as theTruth. Two letters are compared, and then presented
@@ -38,7 +38,7 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth):
     isMistDescended = random.uniform(0,1)
     if isMistDescended > environmentReliability:
         impartedWisdom = invertKnowledge(impartedWisdom)
-    agentProfile[2] = checkKnowledge(agentProfile[2],impartedWisdom,agentProfile[0])
+    agentProfile[2] = checkKnowledge(agentProfile[2],impartedWisdom,agentProfile[0],alpha)
     return agentProfile
 
 def invertKnowledge(knowledgeBit):
@@ -49,7 +49,7 @@ def invertKnowledge(knowledgeBit):
     knowledgeBit[2] = tempVar
     return knowledgeBit
 
-def meetAgent(agentProfile, agentArray):
+def meetAgent(agentProfile, agentArray,alpha):
     # A function that represents the agent being told a hypothesis, and given
     # evidence for why it is beleived.
     otherAgentID = agentProfile[0]
@@ -64,10 +64,10 @@ def meetAgent(agentProfile, agentArray):
             willIScrewUp = random.uniform(0,1)
             if willIScrewUp > otherAgentProfile[1]:
                 newKnowledge = invertKnowledge(newKnowledge)
-            agentProfile[2] = checkKnowledge(agentProfile[2], newKnowledge, agentProfile[0])
+            agentProfile[2] = checkKnowledge(agentProfile[2], newKnowledge, agentProfile[0],alpha)
     return agentProfile
 
-def transitiveDeduction(agentProfile):
+def transitiveDeduction(agentProfile,alpha):
     # Function which checks through an agents knowledge base and identifies
     # if any obvious transitive deductions can be made in the form:
     # {x < y, b < x} -> {b < y}
@@ -80,24 +80,17 @@ def transitiveDeduction(agentProfile):
                             # {x < y, b < x} -> {b < y}
                             combinedProb = agentProfile[2][i][3]*agentProfile[2][i][3]
                             newKnowledge = [agentProfile[2][j][0],"<",agentProfile[2][i][2],combinedProb,[str(agentProfile[0]) + "["+str(i)+"]"+"["+str(j)+"]"]]
-                            agentProfile[2] = checkKnowledge(agentProfile[2],newKnowledge,agentProfile[0])
+                            agentProfile[2] = checkKnowledge(agentProfile[2],newKnowledge,agentProfile[0],alpha)
     return agentProfile
 
-def checkKnowledge(agentKnowledge, newKnowledge, agentID):
+def checkKnowledge(agentKnowledge, newKnowledge, agentID, alpha):
     # Function that checks that the knowledge about to be learned is novel,
     # and if not checks if it is more beleived than the existing knowledge
     # and replaces the knowledge if so.
     newKnowledge = newKnowledge[:]
     for i in agentKnowledge:
-        if i[0] == newKnowledge[0] and i[2] == newKnowledge[2]:
-            if i[3]>=newKnowledge[3]:
-                return agentKnowledge
-            else:
-                i[3] = newKnowledge[3]
-                i[4] = newKnowledge[4][:]+[agentID]
-                return agentKnowledge
-        if i[2] == newKnowledge[0] and i[0] == newKnowledge[2]:
-            if i[3]>=newKnowledge[3]:
+        if (i[0] == newKnowledge[0] and i[2] == newKnowledge[2]) or (i[2] == newKnowledge[0] and i[0] == newKnowledge[2]):
+            if i[3]>=(newKnowledge[3]+alpha*newKnowledge[3]):
                 return agentKnowledge
             else:
                 i[0] = newKnowledge[0]
@@ -175,43 +168,58 @@ def makeAHypothesis(knowledgeSet,i, theTruth):
 def guessTheTruth(myHypothesis, theTruth):
     # A function that given a hypothesis, will create a possible ordering.
     # Currently treats each position as independent.
-    myGuess = []
-    for i in range(len(theTruth)):
-        optionsList = []
-        optionProbs = []
-        for j in myHypothesis:
-            if i == j[2]:
-                optionsList.append(j[0])
-                optionProbs.append(j[3])
-        bestProb = max(optionProbs)
-        bestOptions = []
-        for i in range(len(optionProbs)):
-            if optionProbs[i] == bestProb:
-                bestOptions.append(i)
-        bestOption = random.choice(bestOptions)
-        myGuess.append(optionsList[bestOption])
+    myGuess = [0]*len(theTruth)
+    beleifMatrix = []
+    counter = 0
+    currentRow = []
+    for i in myHypothesis:
+        counter += 1
+        currentRow.append(i[3])
+        if counter == len(theTruth):
+            beleifMatrix.append(currentRow)
+            currentRow = []
+            counter = 0
+    counter = 0
+    while counter < len(theTruth):
+        bestBeleifs = []
+        for i in beleifMatrix:
+            bestBeleifs.append(max(i))
+        bestBeleif = max(bestBeleifs)
+        bestIndex = bestBeleifs.index(bestBeleif)
+        bestPos = beleifMatrix[bestIndex].index(bestBeleif)
+        myGuess[bestPos] = myHypothesis[bestPos + len(theTruth)*bestIndex][0]
+        for i in range(len(beleifMatrix)):
+            removedProb = beleifMatrix[i][bestPos]
+            if removedProb != 1:
+                for j in range(len(beleifMatrix[i])):
+                    if i == bestIndex:
+                        beleifMatrix[i][j] = 0
+                    elif j != bestPos:
+                        beleifMatrix[i][j] = beleifMatrix[i][j]/(1-removedProb)
+                beleifMatrix[i][bestPos] = 0
+        counter+=1
     return myGuess
 
-def agentThink(agentProfile, theTruth):
+def agentThink(agentProfile, theTruth,alpha):
     # Function to represent an agent thinking through their knowledge.
-    # agentProfile = transitiveDeduction(agentProfile)
+    #agentProfile = transitiveDeduction(agentProfile)
     agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
-def agentAction(agentProfile, environmentReliability, agentArray, theTruth, chatChance, testChance):
+def agentAction(agentProfile, environmentReliability, agentArray, theTruth,alpha, chatChance, testChance):
     # Function to represent an agent deciding what to do, currently choosing to
     # learn from either the environment or another agent, or to think through
     # their existing knowledge
     whatToDo = random.uniform(0,1)
     if whatToDo < chatChance:
-        agentProfile = meetAgent(agentProfile, agentArray)
+        agentProfile = meetAgent(agentProfile, agentArray,alpha)
         agentProfile[5] = "meet"
     elif whatToDo > 1-testChance:
-        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth)
+        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha)
         agentProfile[5] = "test"
     else:
         if agentProfile[5] != "thought":
-            agentProfile = agentThink(agentProfile, theTruth)
+            agentProfile = agentThink(agentProfile, theTruth,alpha)
             agentProfile[5] = "thought"
     return agentProfile
 

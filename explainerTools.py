@@ -280,16 +280,16 @@ def graphAvgChainLen(avgChainA,dir="", title=""):
 # agentArray = importSim("exportedAgentArray.csv")
 theTruth = "12345"
 agentArray = frameworkXAI.genAgents(50,0.99)
-loops = 300
+loops = 30
 avgChainA = []
 maxChainA = []
 for k in range(loops):
     for i in range(len(agentArray)):
-        agentArray[i] = frameworkXAI.agentAction(agentArray[i], 0.99, agentArray, theTruth, 0.5, 0.1)
+        agentArray[i] = frameworkXAI.agentAction(agentArray[i], 0.99, agentArray, theTruth, 0, 0.5, 0.1)
     avgChainA.append(findAvgChainLength(agentArray))
     maxChainA.append(findMaxChainLength(agentArray))
-graphAvgChainLen(avgChainA,"Graphs/Explainer/", "testChance10")
-graphMaxChainLen(maxChainA,"Graphs/Explainer/", "testChance10")
+# graphAvgChainLen(avgChainA,"Graphs/Explainer/", "testChance10")
+# graphMaxChainLen(maxChainA,"Graphs/Explainer/", "testChance10")
 # makeHypothesisGraph(agentArray,0,'1',"Graphs/Explainer/", "25Iter")
 # makeSystemHypothesisGraph(agentArray,'1',"Graphs/Explainer/", "25Iter")
 # knowledgeChainSystemGraph(agentArray,"Graphs/Explainer/", "Iter"+str(loops))

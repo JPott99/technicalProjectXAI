@@ -1,9 +1,4 @@
-# import zealousXAI
-import fickleXAI
 import testerXAI
-import lessTesterXAI
-import zealousTesterXAI
-import greatTesterXAI
 # import superFickleXAI
 from matplotlib import pyplot as plt
 import numpy as np
@@ -30,11 +25,10 @@ for k in range(loops):
     subloops = int(sys.argv[3])
     for j in range(subloops):
         agentRel = reliability
-        agentArrayZ = fickleXAI.genAgents(50,agentRel)
+        agentArrayZ = testerXAI.genAgents(50,agentRel)
         agentArrayF = testerXAI.genAgents(50,agentRel)
-        agentArrayT = lessTesterXAI.genAgents(50,agentRel)
-        agentArrayTG = greatTesterXAI.genAgents(50,agentRel)
-        agentArraySF = zealousTesterXAI.genAgents(50,agentRel)
+        agentArrayT = testerXAI.genAgents(50,agentRel)
+        agentArrayTG = testerXAI.genAgents(50,agentRel)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
@@ -44,16 +38,14 @@ for k in range(loops):
             guessAccuracyTG = 0
             guessAccuracySF = 0
             for i in range(len(agentArrayZ)):
-                agentArrayZ[i] = fickleXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth, 0.35, 0.35)
-                guessAccuracyZ += fickleXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
-                agentArrayF[i] = testerXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.35, 0.35)
+                agentArrayZ[i] = testerXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth,0, 0.35, 0.35,0)
+                guessAccuracyZ += testerXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
+                agentArrayF[i] = testerXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth,0, 0.35, 0.35,0.25)
                 guessAccuracyF += testerXAI.checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
-                agentArrayT[i] = lessTesterXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.35, 0.35)
-                guessAccuracyT += lessTesterXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
-                agentArrayTG[i] = greatTesterXAI.agentAction(agentArrayTG[i], environmentReliability, agentArrayTG, theTruth, 0.35, 0.35)
-                guessAccuracyTG += greatTesterXAI.checkAgentGuessAccuracy(agentArrayTG[i][4],theTruth)/len(agentArrayTG)
-                agentArraySF[i] = zealousTesterXAI.agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth, 0.35, 0.35)
-                guessAccuracySF += zealousTesterXAI.checkAgentGuessAccuracy(agentArraySF[i][4],theTruth)/len(agentArraySF)
+                agentArrayT[i] = testerXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth,0, 0.35, 0.35,0.5)
+                guessAccuracyT += testerXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
+                agentArrayTG[i] = testerXAI.agentAction(agentArrayTG[i], environmentReliability, agentArrayTG, theTruth,0, 0.35, 0.35,0.75)
+                guessAccuracyTG += testerXAI.checkAgentGuessAccuracy(agentArrayTG[i][4],theTruth)/len(agentArrayTG)
             counter+=1
             if guessAccuracyZ>0.75 and len(timeArrayAvgZ)==j:
                 timeArrayAvgZ.append(counter)
@@ -63,9 +55,7 @@ for k in range(loops):
                 timeArrayAvgT.append(counter)
             if guessAccuracyTG>0.75 and len(timeArrayAvgTG)==j:
                 timeArrayAvgTG.append(counter)
-            if guessAccuracySF>0.75 and len(timeArrayAvgSF)==j:
-                timeArrayAvgSF.append(counter)
-            if len(timeArrayAvgZ+timeArrayAvgF+timeArrayAvgT+timeArrayAvgSF+timeArrayAvgTG) == 5*(j+1):
+            if len(timeArrayAvgZ+timeArrayAvgF+timeArrayAvgT+timeArrayAvgTG) == 4*(j+1):
                 continueLooping = False
             if counter >1000:
                 if len(timeArrayAvgZ)==j:
@@ -76,8 +66,6 @@ for k in range(loops):
                     timeArrayAvgT.append(counter)
                 if len(timeArrayAvgTG)==j:
                     timeArrayAvgTG.append(counter)
-                if len(timeArrayAvgSF)==j:
-                    timeArrayAvgSF.append(counter)
                 continueLooping = False
     timeArrayZ.append(sum(timeArrayAvgZ)/subloops)
     timeArrayZError.append(np.std(np.array(timeArrayAvgZ)))
@@ -99,7 +87,7 @@ plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeA
 plt.plot(x,timeArrayTG)
 plt.fill_between(x,np.array(timeArrayTG)-np.array(timeArrayTGError),np.array(timeArrayTG)+np.array(timeArrayTGError), alpha = 0.5)
 
-plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester"])
+plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Testing Behaviours against $\it{E}$")

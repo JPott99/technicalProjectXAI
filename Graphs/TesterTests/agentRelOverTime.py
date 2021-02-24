@@ -1,9 +1,4 @@
-# import zealousXAI
-import fickleXAI
 import testerXAI
-import lessTesterXAI
-import zealousTesterXAI
-import greatTesterXAI
 import sys
 from matplotlib import pyplot as plt
 import numpy as np
@@ -28,10 +23,10 @@ for k in range(loops):
     timeArrayAvgTG = []
     subloops = int(sys.argv[3])
     for j in range(subloops):
-        agentArrayZ = fickleXAI.genAgents(50,agentReliability)
+        agentArrayZ = testerXAI.genAgents(50,agentReliability)
         agentArrayF = testerXAI.genAgents(50,agentReliability)
-        agentArrayT = lessTesterXAI.genAgents(50,agentReliability)
-        agentArrayTG = greatTesterXAI.genAgents(50,agentReliability)
+        agentArrayT = testerXAI.genAgents(50,agentReliability)
+        agentArrayTG = testerXAI.genAgents(50,agentReliability)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
@@ -40,14 +35,14 @@ for k in range(loops):
             guessAccuracyT = 0
             guessAccuracyTG = 0
             for i in range(len(agentArrayZ)):
-                agentArrayZ[i] = fickleXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth, 0.35, 0.35)
-                guessAccuracyZ += fickleXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
-                agentArrayF[i] = testerXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.35, 0.35)
+                agentArrayZ[i] = testerXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth,0, 0.35, 0.35,0)
+                guessAccuracyZ += testerXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
+                agentArrayF[i] = testerXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth,0, 0.35, 0.35,0.25)
                 guessAccuracyF += testerXAI.checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
-                agentArrayT[i] = lessTesterXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.35, 0.35)
-                guessAccuracyT += lessTesterXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayTG)
-                agentArrayTG[i] = greatTesterXAI.agentAction(agentArrayTG[i], environmentReliability, agentArrayTG, theTruth, 0.35, 0.35)
-                guessAccuracyTG += greatTesterXAI.checkAgentGuessAccuracy(agentArrayTG[i][4],theTruth)/len(agentArrayTG)
+                agentArrayT[i] = testerXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth,0, 0.35, 0.35,0.5)
+                guessAccuracyT += testerXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayTG)
+                agentArrayTG[i] = testerXAI.agentAction(agentArrayTG[i], environmentReliability, agentArrayTG, theTruth,0, 0.35, 0.35,0.75)
+                guessAccuracyTG += testerXAI.checkAgentGuessAccuracy(agentArrayTG[i][4],theTruth)/len(agentArrayTG)
             counter+=1
             if guessAccuracyZ>0.75 and len(timeArrayAvgZ)==j:
                 timeArrayAvgZ.append(counter)
@@ -89,7 +84,7 @@ plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeA
 plt.plot(x,timeArrayTG)
 plt.fill_between(x,np.array(timeArrayTG)-np.array(timeArrayTGError),np.array(timeArrayTG)+np.array(timeArrayTGError), alpha = 0.5)
 
-plt.legend(["No Testing","Tester", "Lesser Tester","Greater Tester"])
+plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
 plt.title("Performance of Testing Behaviours against $\it{A}$")

@@ -27,7 +27,7 @@ for k in range(loops0):
             while continueLooping == True:
                 guessAccuracy = 0
                 for i in range(len(agentArray)):
-                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth, startPint+(1+k)*stepPint/loops0, startPint+(1+l)*stepPint/loops1)
+                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth,0, startPint+(1+k)*stepPint/loops0, startPint+(1+l)*stepPint/loops1)
                     guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
                 guessAccuracies.append(guessAccuracy)
                 counter+=1

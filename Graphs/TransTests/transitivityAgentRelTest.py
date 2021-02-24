@@ -26,9 +26,9 @@ for k in range(loops):
             guessAccuracyT = 0
             guessAccuracyC = 0
             for i in range(len(agentArrayT)):
-                agentArrayT[i] = transitiveXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.35, 0.35)
+                agentArrayT[i] = transitiveXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth,0, 0.35, 0.35)
                 guessAccuracyT += transitiveXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
-                agentArrayC[i] = transitiveCXAI.agentAction(agentArrayC[i], environmentReliability, agentArrayC, theTruth, 0.35, 0.35)
+                agentArrayC[i] = transitiveCXAI.agentAction(agentArrayC[i], environmentReliability, agentArrayC, theTruth,0, 0.35, 0.35)
                 guessAccuracyC += transitiveCXAI.checkAgentGuessAccuracy(agentArrayC[i][4],theTruth)/len(agentArrayC)
             counter+=1
             if guessAccuracyT>0.75 and len(timeArrayAvgT)==j:

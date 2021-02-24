@@ -1,7 +1,4 @@
-import zealousXAI
-import fickleXAI
-import fundamentalistXAI
-import superFickleXAI
+from frameworkXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
 import sys
@@ -27,10 +24,10 @@ for k in range(loops):
     subloops = int(sys.argv[3])
     for j in range(subloops):
         agentRel = reliability
-        agentArrayZ = zealousXAI.genAgents(50,agentRel)
-        agentArrayF = fickleXAI.genAgents(50,agentRel)
-        agentArrayFu = fundamentalistXAI.genAgents(50,agentRel)
-        agentArraySF = superFickleXAI.genAgents(50,agentRel)
+        agentArrayZ = genAgents(50,agentRel)
+        agentArrayF = genAgents(50,agentRel)
+        agentArrayFu = genAgents(50,agentRel)
+        agentArraySF = genAgents(50,agentRel)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
@@ -40,16 +37,16 @@ for k in range(loops):
             # guessAccuracyT = 0
             guessAccuracySF = 0
             for i in range(len(agentArrayZ)):
-                agentArrayZ[i] = zealousXAI.agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth, 0.35, 0.35)
-                guessAccuracyZ += zealousXAI.checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
-                agentArrayF[i] = fickleXAI.agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth, 0.35, 0.35)
-                guessAccuracyF += fickleXAI.checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
-                agentArrayFu[i] = fundamentalistXAI.agentAction(agentArrayFu[i], environmentReliability, agentArrayFu, theTruth, 0.35, 0.35)
-                guessAccuracyFu += fundamentalistXAI.checkAgentGuessAccuracy(agentArrayFu[i][4],theTruth)/len(agentArrayFu)
+                agentArrayZ[i] = agentAction(agentArrayZ[i], environmentReliability, agentArrayZ, theTruth,0.001, 0.35, 0.35)
+                guessAccuracyZ += checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
+                agentArrayF[i] = agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth,0, 0.35, 0.35)
+                guessAccuracyF += checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
+                agentArrayFu[i] = agentAction(agentArrayFu[i], environmentReliability, agentArrayFu, theTruth,100, 0.35, 0.35)
+                guessAccuracyFu += checkAgentGuessAccuracy(agentArrayFu[i][4],theTruth)/len(agentArrayFu)
                 # agentArrayT[i] = testerXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.5, 0.1)
                 # guessAccuracyT += testerXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
-                agentArraySF[i] = superFickleXAI.agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth, 0.35, 0.35)
-                guessAccuracySF += superFickleXAI.checkAgentGuessAccuracy(agentArraySF[i][4],theTruth)/len(agentArraySF)
+                agentArraySF[i] = agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth,-100, 0.35, 0.35)
+                guessAccuracySF += checkAgentGuessAccuracy(agentArraySF[i][4],theTruth)/len(agentArraySF)
             counter+=1
             if guessAccuracyZ>0.75 and len(timeArrayAvgZ)==j:
                 timeArrayAvgZ.append(counter)
