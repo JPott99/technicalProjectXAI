@@ -116,7 +116,7 @@ plt.fill_between(x,np.array(timeArrayFu)-np.array(timeArrayFuError),np.array(tim
 plt.plot(x,timeArraySF)
 plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(timeArraySF)+np.array(timeArraySFError), alpha = 0.5)
 
-plt.legend(["Zealous","Flexible", "Fundamentalist", "Fickle"])
+plt.legend(["Zealous ($\alpha = 0.001$)","Flexible ($\alpha = 0$)", "Fundamentalist ($\alpha = 1$)", "Fickle ($\alpha = -1$)"])
 plt.xlabel("Agent Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
 plt.title("Performance of Agent flexibility against $\it{A}$")
