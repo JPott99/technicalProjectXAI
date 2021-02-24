@@ -41,11 +41,11 @@ for k in range(loops):
                 guessAccuracyZ += checkAgentGuessAccuracy(agentArrayZ[i][4],theTruth)/len(agentArrayZ)
                 agentArrayF[i] = agentAction(agentArrayF[i], environmentReliability, agentArrayF, theTruth,0, 0.35, 0.35)
                 guessAccuracyF += checkAgentGuessAccuracy(agentArrayF[i][4],theTruth)/len(agentArrayF)
-                agentArrayFu[i] = agentAction(agentArrayFu[i], environmentReliability, agentArrayFu, theTruth,100, 0.35, 0.35)
+                agentArrayFu[i] = agentAction(agentArrayFu[i], environmentReliability, agentArrayFu, theTruth,1, 0.35, 0.35)
                 guessAccuracyFu += checkAgentGuessAccuracy(agentArrayFu[i][4],theTruth)/len(agentArrayFu)
                 # agentArrayT[i] = testerXAI.agentAction(agentArrayT[i], environmentReliability, agentArrayT, theTruth, 0.5, 0.1)
                 # guessAccuracyT += testerXAI.checkAgentGuessAccuracy(agentArrayT[i][4],theTruth)/len(agentArrayT)
-                agentArraySF[i] = agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth,-100, 0.35, 0.35)
+                agentArraySF[i] = agentAction(agentArraySF[i], environmentReliability, agentArraySF, theTruth,-1, 0.35, 0.35)
                 guessAccuracySF += checkAgentGuessAccuracy(agentArraySF[i][4],theTruth)/len(agentArraySF)
             counter+=1
             if guessAccuracyZ>0.75 and len(timeArrayAvgZ)==j:
