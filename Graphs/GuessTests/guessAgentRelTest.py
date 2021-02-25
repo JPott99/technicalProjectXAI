@@ -16,7 +16,7 @@ for k in range(loops):
     timeArrayAvgC = []
     subloops = int(sys.argv[3])
     for j in range(subloops):
-        agentReliability = 0.5+(k+1)/loops*0.5
+        agentReliability = 0.5+(k)/loops*0.5
         agentArrayT = independentGuessXAI.genAgents(50,agentReliability)
         agentArrayC = dependentGuessXAI.genAgents(50,agentReliability)
         counter  = 0
@@ -49,7 +49,7 @@ for k in range(loops):
 
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.5+0.5
+firstNo = 0.5
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayT)
 plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)

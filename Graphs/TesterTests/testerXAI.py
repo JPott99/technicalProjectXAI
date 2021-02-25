@@ -35,7 +35,6 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha, b
             otherLetter = random.randint(0,len(theTruth)-1)
         history = ["E"]
     else:
-        environmentReliability = environmentReliability*1
         minProb = 5000
         knowledgeToTest = agentProfile[2][0]
         for i in agentProfile[2]:
@@ -123,6 +122,8 @@ def genHypotheses(agentProfile, theTruth):
     #       [element,"=",position,agentBeleif,evidence]
     # where the evidence is a list of indexes for knowledge in the agentKnowledge.
     newHypothesis = []
+    theTruth = list(theTruth)
+    random.shuffle(theTruth)
     for i in theTruth:
         hypothesisEvidence = []
         relevantKnowledge= []

@@ -15,7 +15,7 @@ timeArraySFError = []
 loops = int(sys.argv[2])
 reliability = float(sys.argv[1])
 for k in range(loops):
-    agentReliability = 0.5+(k+1)/loops*0.5
+    agentReliability = 0.5+(k)/loops*0.5
     environmentReliability = reliability
     timeArrayAvgZ = []
     timeArrayAvgF = []
@@ -105,7 +105,7 @@ for k in range(loops):
     timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.5+0.5
+firstNo = 0.5
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayZ)
 plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)

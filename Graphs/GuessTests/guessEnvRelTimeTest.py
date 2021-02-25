@@ -16,7 +16,7 @@ timeArrayC = []
 timeArrayCError = []
 loops = int(sys.argv[2])
 for k in range(loops):
-    environmentReliability =  0.7+(k+1)/loops*0.3
+    environmentReliability =  0.7+(k)/loops*0.3
     timeArrayAvgT = []
     timeArrayAvgC = []
     timeTimeAvgT = []
@@ -67,7 +67,7 @@ for k in range(loops):
 
     # for i in agentArray:
     #     print(i)
-firstNo = 1/loops*0.3+0.7
+firstNo = 0.7
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayT)
 plt.fill_between(x,np.array(timeArrayT)-np.array(timeArrayTError),np.array(timeArrayT)+np.array(timeArrayTError), alpha = 0.5)

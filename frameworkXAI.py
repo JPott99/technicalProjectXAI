@@ -109,6 +109,8 @@ def genHypotheses(agentProfile, theTruth):
     #       [element,"=",position,agentBeleif,evidence]
     # where the evidence is a list of indexes for knowledge in the agentKnowledge.
     newHypothesis = []
+    theTruth = list(theTruth)
+    random.shuffle(theTruth)
     for i in theTruth:
         hypothesisEvidence = []
         relevantKnowledge= []
