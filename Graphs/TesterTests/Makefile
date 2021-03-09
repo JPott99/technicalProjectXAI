@@ -1,7 +1,8 @@
+loops = 15
+subloops = 20
+
 all:
-	python agentRelOverTime.py 1
-	python agentRelOverTime.py 0.99
-	python agentRelOverTime.py 0.9
-	python envRelOverTime.py 1
-	python envRelOverTime.py 0.99
-	python envRelOverTime.py 0.9
+	python agentRelOverTime.py 0.99 $(loops) $(subloops)
+	python agentRelOverTime.py 0.9 $(loops) $(subloops)
+	python envRelOverTime.py 0.99 $(loops) $(subloops)
+	python envRelOverTime.py 0.9 $(loops) $(subloops)

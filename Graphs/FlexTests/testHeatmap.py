@@ -1,4 +1,4 @@
-from testerXAI import *
+from frameworkXAI import *
 from matplotlib import pyplot as plt
 import numpy as np
 import sys
@@ -16,14 +16,14 @@ for k in range(loops0):
         timeArrayAvg = []
         subloops = 30
         for j in range(subloops):
-            agentArray = genAgents(50,0.5+l/loops1*0.5)
+            agentArray = genAgents(50,0.99)
             counter  = 0
             continueLooping = True
             guessAccuracies = []
             while continueLooping == True:
                 guessAccuracy = 0
                 for i in range(len(agentArray)):
-                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth,0, 0.35,0.35, k/loops0)
+                    agentArray[i] = agentAction(agentArray[i], environmentReliability, agentArray, theTruth,-1+l/loops1*2, 0.35,0.35)
                     guessAccuracy += checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
                 guessAccuracies.append(guessAccuracy)
                 counter+=1
@@ -37,10 +37,10 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.5,1,0,1],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[-1,1,0,1],aspect='auto')
 plt.colorbar()
 plt.ylabel("Testing Rate")
-plt.xlabel("Agent Reliability, $\it{A}$")
-plt.title("Heatmap comparing Testing Rate and Agent Reliability.")
-plt.savefig(folderName+"heatMapTestA.png")
+plt.xlabel(r"$\alpha$ Flexibility")
+plt.title("Heatmap comparing Testing Rate and Flexibility.")
+plt.savefig(folderName+"heatMapTestAlpha.png")
 #plt.show()

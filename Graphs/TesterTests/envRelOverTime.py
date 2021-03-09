@@ -16,7 +16,7 @@ timeArrayTGError = []
 loops = int(sys.argv[2])
 for k in range(loops):
     # print(k)
-    environmentReliability = 0.7+(k)/loops*0.3
+    environmentReliability = 0.85+(k)/loops*0.15
     timeArrayAvgZ = []
     timeArrayAvgF = []
     timeArrayAvgT = []
@@ -76,7 +76,7 @@ for k in range(loops):
     timeArrayTG.append(sum(timeArrayAvgTG)/subloops)
     timeArrayTGError.append(np.std(np.array(timeArrayAvgTG)))
 
-firstNo = 0.7
+firstNo = 0.85
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayZ)
 plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
@@ -91,5 +91,5 @@ plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Testing Behaviours against $\it{E}$")
-plt.savefig("Graphs/TesterTests/envRelTestTestAR"+str(int(100*reliability))+".png")
+plt.savefig("envRelTestTestAR"+str(int(100*reliability))+".png")
 # plt.show()

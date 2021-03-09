@@ -16,7 +16,7 @@ timeArrayC = []
 timeArrayCError = []
 loops = int(sys.argv[2])
 for k in range(loops):
-    environmentReliability =  0.7+(k)/loops*0.3
+    environmentReliability =  0.85+(k)/loops*0.15
     timeArrayAvgT = []
     timeArrayAvgC = []
     timeTimeAvgT = []

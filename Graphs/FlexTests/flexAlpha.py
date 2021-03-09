@@ -1,4 +1,4 @@
-import testerXAI
+import frameworkXAI
 import sys
 from matplotlib import pyplot as plt
 import numpy as np
@@ -14,14 +14,14 @@ for k in range(loops):
     timeArrayAvg = []
     subloops = 100
     for j in range(subloops):
-        agentArray = testerXAI.genAgents(50,agentReliability)
+        agentArray = frameworkXAI.genAgents(50,agentReliability)
         counter  = 0
         continueLooping = True
         while continueLooping == True:
             guessAccuracy = 0
             for i in range(len(agentArray)):
-                agentArray[i] = testerXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth,0, 0.35, 0.35,k/loops)
-                guessAccuracy += testerXAI.checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
+                agentArray[i] = frameworkXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth,-1+2*k/loops, 0.35, 0.35)
+                guessAccuracy += frameworkXAI.checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
             counter+=1
             if guessAccuracy>0.75 and len(timeArrayAvg)==j:
                 timeArrayAvg.append(counter)
@@ -34,15 +34,15 @@ for k in range(loops):
     timeArrayError.append(np.std(np.array(timeArrayAvg)))
 
 
-firstNo = 0
+firstNo = -1
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArray)
 plt.fill_between(x,np.array(timeArray)-np.array(timeArrayError),np.array(timeArray)+np.array(timeArrayError), alpha = 0.5)
 
 
 # plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
-plt.xlabel("Testing Rate")
+plt.xlabel(r"$\alpha$ Flexibility")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title("Performance against testing rate.")
-plt.savefig("TestingRateLowEnv.png")
+plt.title(r"Performance against $\alpha$.")
+plt.savefig("alphaFlexLowEnv.png")
 # plt.show()
