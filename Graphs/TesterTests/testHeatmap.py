@@ -6,15 +6,16 @@ import sys
 folderName = ""#sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
-environmentReliability = 0.75
+environmentReliability = 0.90
 timeArray = []
 loops0 = 50
 for k in range(loops0):
+    print(k)
     loops1=50
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 30
+        subloops = 2
         for j in range(subloops):
             agentArray = genAgents(50,0.5+l/loops1*0.5)
             counter  = 0
@@ -42,5 +43,5 @@ plt.colorbar()
 plt.ylabel("Testing Rate")
 plt.xlabel("Agent Reliability, $\it{A}$")
 plt.title("Heatmap comparing Testing Rate and Agent Reliability.")
-plt.savefig(folderName+"heatMapTestA75E.png")
+plt.savefig(folderName+"heatMapTestA90E.png")
 #plt.show()
