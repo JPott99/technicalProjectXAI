@@ -12,7 +12,7 @@ for k in range(loops):
     # print(k, agentReliability)
     environmentReliability = 0.5+ 0.5*k/loops
     timeArrayAvg = []
-    subloops = 100
+    subloops = 25
     for j in range(subloops):
         agentArray = frameworkXAI.genAgents(50,agentReliability)
         counter  = 0
@@ -43,6 +43,6 @@ plt.fill_between(x,np.array(timeArray)-np.array(timeArrayError),np.array(timeArr
 # plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title(r"Performance against $\it{E}.")
+plt.title(r"Performance against $\it{E}$.")
 plt.savefig(str(input*100)+"FlexE.png")
 # plt.show()

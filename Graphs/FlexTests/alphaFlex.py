@@ -10,7 +10,7 @@ loops = 100
 for k in range(loops):
     agentReliability = 0.99
     # print(k, agentReliability)
-    environmentReliability = 0.5
+    environmentReliability = 0.90
     timeArrayAvg = []
     subloops = 100
     for j in range(subloops):
@@ -20,7 +20,7 @@ for k in range(loops):
         while continueLooping == True:
             guessAccuracy = 0
             for i in range(len(agentArray)):
-                agentArray[i] = frameworkXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth,-0.5+k/loops*1.5, 0.35, 0.35)
+                agentArray[i] = frameworkXAI.agentAction(agentArray[i], environmentReliability, agentArray, theTruth,-1+(k+1)/loops*2, 0.35, 0.35)
                 guessAccuracy += frameworkXAI.checkAgentGuessAccuracy(agentArray[i][4],theTruth)/len(agentArray)
             counter+=1
             if guessAccuracy>0.75 and len(timeArrayAvg)==j:
@@ -34,15 +34,15 @@ for k in range(loops):
     timeArrayError.append(np.std(np.array(timeArrayAvg)))
 
 
-firstNo = -0.5
+firstNo = -1
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArray)
 plt.fill_between(x,np.array(timeArray)-np.array(timeArrayError),np.array(timeArray)+np.array(timeArrayError), alpha = 0.5)
 
 
 # plt.legend(["No Testing","25% Tester", "50% Tester","75% Tester"])
-plt.xlabel("Environmental Reliability")
+plt.xlabel(r"$\alpha$ Flexibility")
 plt.ylabel("Number of Iterations to 75% accuracy")
-plt.title(r"Performance against $\it{E}.")
-plt.savefig("cutoffFlexE.png")
+plt.title(r"Performance against $\alpha$.")
+plt.savefig("FlexE90.png")
 # plt.show()
