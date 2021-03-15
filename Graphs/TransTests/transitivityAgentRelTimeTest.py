@@ -43,19 +43,19 @@ for k in range(loops):
                 timeC += time.time() - startTime
             counter+=1
             if guessAccuracyT>0.75 and len(timeArrayAvgT)==j:
-                timeArrayAvgT.append(counter)
+                timeArrayAvgT.append(timeT)
                 timeTimeAvgT.append(timeT)
             if guessAccuracyC>0.75 and len(timeArrayAvgC)==j:
-                timeArrayAvgC.append(counter)
+                timeArrayAvgC.append(timeT)
                 timeTimeAvgC.append(timeC)
             if len(timeArrayAvgT+timeArrayAvgC) == 2*(j+1):
                 continueLooping = False
             if counter >1000:
                 if len(timeArrayAvgT)==j:
-                    timeArrayAvgT.append(counter)
+                    timeArrayAvgT.append(timeT)
                     timeTimeAvgT.append(timeT)
                 if len(timeArrayAvgC)==j:
-                    timeArrayAvgC.append(counter)
+                    timeArrayAvgC.append(timeT)
                     timeTimeAvgC.append(timeC)
                 continueLooping = False
     timeArrayT.append(sum(timeArrayAvgT)/subloops)
@@ -76,4 +76,5 @@ plt.xlabel("Agent Reliability")
 plt.ylabel("Time to 75% (s)")
 plt.title("Transitivity Performance against $\it{A}$")
 plt.savefig("Graphs/TransTests/agentTransTimeTestER"+str(int(100*reliability))+".png")
+# plt.savefig("agentTransTimeTestER"+str(int(100*reliability))+".png")
 # plt.show()
