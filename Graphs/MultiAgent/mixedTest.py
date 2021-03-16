@@ -16,7 +16,7 @@ for k in range(loops0):
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 25
+        subloops = 40
         mean = k/loops0;
         stdDev = (l/loops1);
         for j in range(subloops):
@@ -47,6 +47,6 @@ plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,1,0,1],aspect='au
 plt.colorbar()
 plt.ylabel("Testing Rate Variance")
 plt.xlabel("Testing Rate Mean")
-plt.title(r"Heatmap comparing Testing Rate normal distribution parameters.")
+plt.title("Heatmap showing mixed Testing Rate performance.")
 plt.savefig(folderName+"mixedAgentTestHeatmapE"+str(int(eRel*100))+"A"+str(int(aRel*100))+".png")
 #plt.show()

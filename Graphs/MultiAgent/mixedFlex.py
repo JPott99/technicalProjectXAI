@@ -16,7 +16,7 @@ for k in range(loops0):
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 25
+        subloops = 40
         mean = -1+2*k/loops0;
         stdDev = (l/loops1);
         for j in range(subloops):
@@ -47,6 +47,6 @@ plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[-1,1,0,1],aspect='a
 plt.colorbar()
 plt.ylabel("Flexibility Variance")
 plt.xlabel("Flexibility Mean")
-plt.title(r"Heatmap comparing Flexibility normal distribution parameters.")
+plt.title("Heatmap showing mixed Flexibility performance.")
 plt.savefig(folderName+"mixedAgentFlexHeatmapE"+str(int(eRel*100))+"A"+str(int(aRel*100))+".png")
 #plt.show()
