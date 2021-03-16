@@ -16,7 +16,7 @@ for k in range(loops0):
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 50
+        subloops = 25
         mean = -1+2*k/loops0;
         stdDev = (l/loops1);
         for j in range(subloops):

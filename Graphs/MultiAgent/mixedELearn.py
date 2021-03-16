@@ -16,7 +16,7 @@ for k in range(loops0):
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 50
+        subloops = 25
         mean = -1+2*k/loops0;
         stdDev = (l/loops1);
         for j in range(subloops):
@@ -45,8 +45,8 @@ for k in range(loops0):
     #     print(i)#
 plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.6,0,0.3],aspect='auto')
 plt.colorbar()
-plt.ylabel(r"$E$ Variance")
-plt.xlabel(r"$E$ Mean")
-plt.title(r"Heatmap comparing $E$ normal distribution parameters.")
+plt.ylabel("Env. Learning Rate Variance")
+plt.xlabel("Env. Learning Rate Mean")
+plt.title("Heatmap comparing Env. Learning Rate normal distribution parameters.")
 plt.savefig(folderName+"mixedAgentELearnHeatmapE"+str(int(eRel*100))+"A"+str(int(aRel*100))+".png")
 #plt.show()

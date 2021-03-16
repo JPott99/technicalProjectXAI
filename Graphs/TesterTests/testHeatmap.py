@@ -15,7 +15,7 @@ for k in range(loops0):
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 2
+        subloops = 10
         for j in range(subloops):
             agentArray = genAgents(50,0.5+l/loops1*0.5)
             counter  = 0
