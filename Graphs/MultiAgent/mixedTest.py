@@ -6,8 +6,8 @@ import sys
 folderName = ""#sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
-aRel = sys.argv[1]
-eRel = sys.argv[2]
+aRel = float(sys.argv[1])
+eRel = float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
 loops0 = 50
@@ -48,5 +48,5 @@ plt.colorbar()
 plt.ylabel("Testing Rate Variance")
 plt.xlabel("Testing Rate Mean")
 plt.title(r"Heatmap comparing Testing Rate normal distribution parameters.")
-plt.savefig(folderName+"mixedAgentTestHeatmapE"+str(int(eRel*100)))+"A"+str(int(aRel*100)))+").png")
+plt.savefig(folderName+"mixedAgentTestHeatmapE"+str(int(eRel*100))+"A"+str(int(aRel*100))+".png")
 #plt.show()
