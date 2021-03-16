@@ -17,7 +17,7 @@ def genAgents(numOfAgents, agentReliability):
         agentArray.append(agentProfile)
     return agentArray
 
-def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha):
+def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha, beta):
     # Function that gives a given agent knowledge of a given reliability.
     # The knowledge is a statement comparing the positions of 2 letters of the
     # alphabet, known as theTruth. Two letters are compared, and then presented
@@ -27,10 +27,23 @@ def environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha):
     # assumed that agents know the reliability of the environment) and
     # knowledge is a list of where knowledge has come from, in this case
     # originating from "E", the environment, and passed to agentID.
-    firstLetter = random.randint(0,len(theTruth)-1)
-    otherLetter = firstLetter
-    while otherLetter == firstLetter:
-        otherLetter = random.randint(0,len(theTruth)-1)
+    whichTest = random.uniform(0,1)
+    if whichTest < 1-beta or len(agentProfile[2]) < 4:
+        firstLetter = random.randint(0,len(theTruth)-1)
+        otherLetter = firstLetter
+        while otherLetter == firstLetter:
+            otherLetter = random.randint(0,len(theTruth)-1)
+        history = ["E"]
+    else:
+        minProb = 5000
+        knowledgeToTest = agentProfile[2][0]
+        for i in agentProfile[2]:
+            if i[3] <= minProb:
+                minProb = i[3]
+                knowledgeToTest = i
+        firstLetter = theTruth.index(knowledgeToTest[0])
+        otherLetter = theTruth.index(knowledgeToTest[2])
+        history = knowledgeToTest[4] + ["E"]
     if firstLetter < otherLetter:
         impartedWisdom = [theTruth[firstLetter],"<",theTruth[otherLetter], environmentReliability, ["E"]]
     else:
@@ -208,7 +221,7 @@ def agentThink(agentProfile, theTruth,alpha):
     agentProfile = genHypotheses(agentProfile, theTruth)
     return agentProfile
 
-def agentAction(agentProfile, environmentReliability, agentArray, theTruth,alpha, chatChance, testChance):
+def agentAction(agentProfile, environmentReliability, agentArray, theTruth,alpha, chatChance, testChance, beta=0):
     # Function to represent an agent deciding what to do, currently choosing to
     # learn from either the environment or another agent, or to think through
     # their existing knowledge
@@ -217,7 +230,7 @@ def agentAction(agentProfile, environmentReliability, agentArray, theTruth,alpha
         agentProfile = meetAgent(agentProfile, agentArray,alpha)
         agentProfile[5] = "meet"
     elif whatToDo > 1-testChance:
-        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha)
+        agentProfile = environmentKnowledge(agentProfile, environmentReliability, theTruth,alpha,beta)
         agentProfile[5] = "test"
     else:
         if agentProfile[5] != "thought":
