@@ -17,8 +17,8 @@ for k in range(loops0):
     for l in range(loops1):
         timeArrayAvg = []
         subloops = 40
-        mean = 0.6*(k+1)/loops0;
-        stdDev = 0.3*(l/loops1);
+        mean = 0.5*(k+1)/loops0;
+        stdDev = 0.25*(l/loops1);
         for j in range(subloops):
             agentArray = genAgents(50,aRel)
             randFlex = mean + np.random.randn(50)*stdDev**2
@@ -43,7 +43,7 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.6,0,0.3],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.5,0,0.25],aspect='auto')
 plt.colorbar()
 plt.ylabel("Env. Learning Rate Variance")
 plt.xlabel("Env. Learning Rate Mean")
