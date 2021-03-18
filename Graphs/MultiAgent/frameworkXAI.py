@@ -7,13 +7,15 @@ def genAgents(numOfAgents, agentReliability):
     # where agentID is a number for reference to the agent, agentReliability is a measure of
     # how likely an agent will relay correct information, and agentKnowledge,
     # agentHypotheses and agentGuess are empty arrays, at time of agent generation.
+    if type(agentReliability) == type(0.99):
+        agentReliability = [agentReliability]*numOfAgents
     agentArray = []
     for i in range(numOfAgents):
         agentKnowledge = []
         agentHypotheses = []
         agentGuess = []
         lastAction = "null"
-        agentProfile = [i,agentReliability,agentKnowledge,agentHypotheses,agentGuess, lastAction]
+        agentProfile = [i,agentReliability[i],agentKnowledge,agentHypotheses,agentGuess, lastAction]
         agentArray.append(agentProfile)
     return agentArray
 
