@@ -17,8 +17,8 @@ for k in range(loops0):
     for l in range(loops1):
         timeArrayAvg = []
         subloops = 40
-        mean = k/loops0*0.5;
-        stdDev = (l/loops1)*0.25;
+        mean = k/loops0*0.55;
+        stdDev = (l/loops1)*0.30;
         for j in range(subloops):
             agentArray = genAgents(50,aRel)
             randFlex = mean + np.random.randn(50)*stdDev**2
