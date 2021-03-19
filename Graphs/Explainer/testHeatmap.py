@@ -9,10 +9,10 @@ folderName = ""#sys.argv[1]
 theTruth = "12345" #list(string.ascii_lowercase)
 environmentReliability = 0.99
 timeArray = []
-loops0 = 50
+loops0 = 40
 for k in range(loops0):
     print(k)
-    loops1=50
+    loops1=40
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
@@ -44,6 +44,6 @@ plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[-1,1,0.5,1],aspect=
 plt.colorbar()
 plt.ylabel(r"Agent Reliability, $A$")
 plt.xlabel(r"Flexibility, $\alpha$")
-plt.title(r"Heatmap comparing $A$ and $\alpha$.")
-plt.savefig(folderName+"heatMapCahinE"+str(int(environmentReliability*100))+".png")
+plt.title(r"Heatmap comparing chain lengths at $A$ and $\alpha$.")
+plt.savefig(folderName+"heatMapChainE"+str(int(environmentReliability*100))+".png")
 #plt.show()
