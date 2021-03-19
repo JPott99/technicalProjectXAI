@@ -10,13 +10,13 @@ aRel = float(sys.argv[1])
 eRel = float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
-loops0 = 50
+loops0 = 40
 for k in range(loops0):
-    loops1=50
+    loops1=40
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 40
+        subloops = 35
         mean = 0.5+0.5*k/loops0;
         stdDev = 0.5*(l/loops1);
         for j in range(subloops):
@@ -43,7 +43,7 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,1,0,1],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.5,1,0,0.5],aspect='auto')
 plt.colorbar()
 plt.ylabel(r"$A$ Variance")
 plt.xlabel(r"$A$ Mean")

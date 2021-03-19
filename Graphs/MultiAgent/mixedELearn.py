@@ -10,15 +10,15 @@ aRel = float(sys.argv[1])
 eRel = float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
-loops0 = 50
+loops0 = 40
 for k in range(loops0):
-    loops1=50
+    loops1=40
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 40
-        mean = 0.55*(k+1)/loops0;
-        stdDev = 0.30*(l/loops1);
+        subloops = 35
+        mean = 0.6*(k+1)/loops0;
+        stdDev = 0.35*(l/loops1);
         for j in range(subloops):
             agentArray = genAgents(50,aRel)
             randFlex = mean + np.random.randn(50)*stdDev**2
@@ -43,7 +43,7 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.5,0,0.25],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.6,0,0.35],aspect='auto')
 plt.colorbar()
 plt.ylabel("Env. Learning Rate Variance")
 plt.xlabel("Env. Learning Rate Mean")
