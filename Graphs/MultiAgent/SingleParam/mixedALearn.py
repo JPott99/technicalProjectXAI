@@ -10,13 +10,13 @@ aRel = float(sys.argv[1])
 eRel = float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
-loops0 = 40
+loops0 = 30
 for k in range(loops0):
-    loops1=40
+    loops1=30
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 35
+        subloops = 10
         mean = k/loops0*0.6;
         stdDev = (l/loops1)*0.35;
         for j in range(subloops):

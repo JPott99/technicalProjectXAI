@@ -6,20 +6,20 @@ import sys
 folderName = ""#sys.argv[1]
 
 theTruth = "12345" #list(string.ascii_lowercase)
-aRel = float(sys.argv[1])
-eRel = float(sys.argv[2])
+aRel = 0.9#float(sys.argv[1])
+eRel = 0.9#float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
-loops0 = 40
+loops0 = 30
 for k in range(loops0):
-    loops1=40
+    loops1=30
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 35
-
-        mean1 = 0.75
-        stdDev1 = 0.25*(l/loops1);
+        subloops = 10
+        print(k,l)
+        mean1 = 0.9
+        stdDev1 = 0.1*(l/loops1);
         mean2 = 0.5
         stdDev2 = 0.5*(k/loops1);
 
@@ -48,7 +48,7 @@ for k in range(loops0):
     timeArray.append(innerArray)
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,1,0,0.5],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,0.5,0,0.1],aspect='auto')
 plt.colorbar()
 plt.ylabel(r"$A$ Variance")
 plt.xlabel(r"Testing Rate Variance")

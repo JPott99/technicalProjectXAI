@@ -10,16 +10,16 @@ aRel = float(sys.argv[1])
 eRel = float(sys.argv[2])
 environmentReliability = eRel
 timeArray = []
-loops0 = 40
+loops0 = 30
 for k in range(loops0):
-    loops1=40
+
+    loops1=30
     innerArray = []
     for l in range(loops1):
         timeArrayAvg = []
-        subloops = 35
-
-        mean1 = 0.75
-        stdDev1 = 0.25*(l/loops1);
+        subloops = 10
+        mean1 = 0.9
+        stdDev1 = 0.1*(l/loops1);
         mean2 = 0
         stdDev2 = 1*(k/loops1);
 
@@ -45,10 +45,12 @@ for k in range(loops0):
                     timeArrayAvg.append(counter)
                     continueLooping = False
         innerArray.append(sum(timeArrayAvg)/subloops)
+        # print(innerArray[-1])
     timeArray.append(innerArray)
+
     # for i in agentArray:
     #     print(i)#
-plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0.5,1,0,0.5],aspect='auto')
+plt.imshow(timeArray, cmap='YlOrRd', origin='lower', extent=[0,1,0,0.1],aspect='auto')
 plt.colorbar()
 plt.ylabel(r"$A$ Variance")
 plt.xlabel(r"Flexibility Variance")
