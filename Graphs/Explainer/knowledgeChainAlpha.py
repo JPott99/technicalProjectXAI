@@ -45,5 +45,5 @@ plt.fill_between(x,np.array(timeArray)-np.array(timeArrayError),np.array(timeArr
 plt.xlabel(r"$\alpha$ Factor of Flexibility")
 plt.ylabel("Average Chain Length")
 plt.title(r"Average Chain Length against $\alpha$ Factor")
-plt.savefig("aRatioA"+str(int(100*agentReliability))+"E"+str(int(100*environmentReliability))+".png")
+plt.savefig("Chain/aRatioA"+str(int(100*agentReliability))+"E"+str(int(100*environmentReliability))+".png")
 # plt.show()
