@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import sys
 theTruth = "12345" #list(string.ascii_lowercase)
-reliability = float(sys.argv[1])
+reliability = 0.99#float(sys.argv[1])
 timeArrayZ = []
 timeArrayZError = []
 timeArrayF = []
@@ -13,15 +13,16 @@ timeArrayFuError = []
 # timeArrayT = []
 timeArraySF = []
 timeArraySFError = []
-loops = int(sys.argv[2])
+loops = 15
 for k in range(loops):
+    print(reliability, k)
     environmentReliability = 0.8+(k)/loops*0.2
     timeArrayAvgZ = []
     timeArrayAvgF = []
     timeArrayAvgFu = []
     # timeArrayAvgT = []
     timeArrayAvgSF = []
-    subloops = int(sys.argv[3])
+    subloops = 10
     for j in range(subloops):
         agentRel = reliability
         agentArrayZ = genAgents(50,agentRel)
@@ -83,7 +84,7 @@ for k in range(loops):
     timeArraySFError.append(np.std(np.array(timeArrayAvgSF)))
         # for i in agentArray:
         #     print(i)
-firstNo = 0.7
+firstNo = 0.8
 x = np.linspace(firstNo,1,loops)
 plt.plot(x,timeArrayZ)
 plt.fill_between(x,np.array(timeArrayZ)-np.array(timeArrayZError),np.array(timeArrayZ)+np.array(timeArrayZError), alpha = 0.5)
@@ -93,9 +94,9 @@ plt.plot(x,timeArrayFu)
 plt.fill_between(x,np.array(timeArrayFu)-np.array(timeArrayFuError),np.array(timeArrayFu)+np.array(timeArrayFuError), alpha = 0.5)
 plt.plot(x,timeArraySF)
 plt.fill_between(x,np.array(timeArraySF)-np.array(timeArraySFError),np.array(timeArraySF)+np.array(timeArraySFError), alpha = 0.5)
-plt.legend([r"Zealous ($\alpha = 0.001$)",r"Flexible ($\alpha = 0$)", r"Fundamentalist ($\alpha = 1$)", r"Fickle ($\alpha = -1$)"])
+plt.legend([r"Flexible ($\alpha = 0.001$)",r"Zealous ($\alpha = 0$)", r"Fickle ($\alpha = 1$)", r"Fundamentalist ($\alpha = -1$)"])
 plt.xlabel("Environmental Reliability")
 plt.ylabel("Number of Iterations to Convergence")
 plt.title("Performance of Agent flexibility against $\it{E}$")
-plt.savefig("Graphs/FlexTests/envRelFlexTestAR"+str(int(100*reliability))+".png")
+plt.savefig("envRelFlexTestAR"+str(int(100*reliability))+".png")
 # plt.show()
